@@ -232,6 +232,7 @@ const actionMap = [
   { keywords: ["상승", "떠오르다", "올라가다"], meaning: "성취 욕구와 자신감 상승이 반영됩니다." },
   { keywords: ["반복", "되풀이"], meaning: "강박이나 루틴에 갇힌 흐름을 의미합니다." },
   { keywords: ["멈춤", "멈추다"], meaning: "번아웃이나 의욕 상실의 신호일 수 있습니다." },
+  { keywords: ["피하다", "피했", "피했다", "피했어", "피함"], meaning: "문제를 정면으로 마주하기보다 거리를 두려는 반응입니다." },
 ];
 
 const bodyMap = [
@@ -336,7 +337,7 @@ const secondaryActionMap = [
   { keywords: ["떨어지다", "흘리다"], meaning: "통제력 상실에 대한 긴장이 반영됩니다." },
   { keywords: ["삼키다", "먹다"], meaning: "감정을 안으로 눌러 담는 경향이 나타납니다." },
   { keywords: ["싸우다", "부딪히다", "다투다"], meaning: "갈등을 드러내고 싶은 충동이 강해졌습니다." },
-  { keywords: ["도망치다", "피하다"], meaning: "책임과 감정을 피하려는 방어가 강합니다." },
+  { keywords: ["도망치다", "피하다", "피했", "피했다", "피했어", "피함"], meaning: "책임과 감정을 피하려는 방어가 강합니다." },
   { keywords: ["잡히다", "붙잡히다"], meaning: "압박을 피하지 못한 상태가 반영됩니다." },
   { keywords: ["잃어버리다", "놓치다"], meaning: "중요한 것을 잃을까 하는 불안이 큽니다." },
   { keywords: ["찾다", "발견"], meaning: "해답이나 돌파구를 찾으려는 흐름입니다." },
@@ -361,18 +362,45 @@ const sampleDreams = [
   "촛불이 꺼지지 않는 방에서 낡은 거울이 나를 바라보았다.",
 ];
 
-const pickMatches = (text, map) =>
-  map.filter((item) => item.keywords.some((keyword) => text.includes(keyword)));
+const particleKeywords = new Set(["이", "가", "은", "는", "을", "를", "에", "에서", "으로", "로", "과", "와", "도", "의"]);
+
+const tokenize = (text) =>
+  text
+    .toLowerCase()
+    .replace(/[^0-9a-zA-Z가-힣\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+
+const matchesKeyword = (text, keyword, tokens) => {
+  if (keyword.length <= 1) {
+    return tokens.some(
+      (token) => token === keyword || (token.startsWith(keyword) && particleKeywords.has(token.slice(1)))
+    );
+  }
+  return text.includes(keyword);
+};
+
+const pickMatches = (text, map) => {
+  const tokens = tokenize(text);
+  return map.filter((item) => item.keywords.some((keyword) => matchesKeyword(text, keyword, tokens)));
+};
+
+const cleanKeywordList = (keywords) =>
+  keywords.filter((keyword) => !particleKeywords.has(keyword));
 
 const listMatchedKeywords = (text, map) => {
-  const hits = map.flatMap((item) => item.keywords.filter((keyword) => text.includes(keyword)));
+  const tokens = tokenize(text);
+  const hits = map.flatMap((item) =>
+    item.keywords.filter((keyword) => matchesKeyword(text, keyword, tokens))
+  );
   const unique = [...new Set(hits)];
-  return unique.slice(0, 6);
+  return cleanKeywordList(unique).slice(0, 6);
 };
 
 const pickTopPrimarySymbol = (text) => {
+  const tokens = tokenize(text);
   const matches = primarySymbolMap.filter((item) =>
-    item.keywords.some((keyword) => text.includes(keyword))
+    item.keywords.some((keyword) => matchesKeyword(text, keyword, tokens))
   );
   if (matches.length === 0) {
     return null;
@@ -381,8 +409,10 @@ const pickTopPrimarySymbol = (text) => {
   return matches[0];
 };
 
-const pickFirstMatch = (text, map) =>
-  map.find((item) => item.keywords.some((keyword) => text.includes(keyword)));
+const pickFirstMatch = (text, map) => {
+  const tokens = tokenize(text);
+  return map.find((item) => item.keywords.some((keyword) => matchesKeyword(text, keyword, tokens)));
+};
 
 const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
 const pickMany = (list, count) => {
@@ -397,6 +427,7 @@ const pickMany = (list, count) => {
 
 const buildInterpretation = (text) => {
   const trimmed = text.trim();
+  const tokens = tokenize(trimmed);
   const symbolHits = pickMatches(trimmed, symbolMap);
   const emotionHits = pickMatches(trimmed, emotionMap);
   const settingHits = pickMatches(trimmed, settingMap);
@@ -405,7 +436,9 @@ const buildInterpretation = (text) => {
   const actionHits = pickMatches(trimmed, actionMap);
   const bodyHits = pickMatches(trimmed, bodyMap);
   const environmentHits = pickMatches(trimmed, environmentMap);
-  const symbolKeywords = listMatchedKeywords(trimmed, symbolMap);
+  const primarySymbol = pickTopPrimarySymbol(trimmed);
+  const primarySymbolOnly = primarySymbol ? [primarySymbol] : symbolHits;
+  const symbolKeywords = listMatchedKeywords(trimmed, primarySymbolOnly);
   const emotionKeywords = listMatchedKeywords(trimmed, emotionMap);
   const settingKeywords = listMatchedKeywords(trimmed, settingMap);
   const characterKeywords = listMatchedKeywords(trimmed, characterMap);
@@ -413,14 +446,13 @@ const buildInterpretation = (text) => {
   const actionKeywords = listMatchedKeywords(trimmed, actionMap);
   const bodyKeywords = listMatchedKeywords(trimmed, bodyMap);
   const environmentKeywords = listMatchedKeywords(trimmed, environmentMap);
-  const primarySymbol = pickTopPrimarySymbol(trimmed);
   const secondaryAction = pickFirstMatch(trimmed, secondaryActionMap);
   const tertiaryTone = pickFirstMatch(trimmed, tertiaryToneMap);
-  const compositeKeywords = [
-    primarySymbol?.keywords?.find((keyword) => trimmed.includes(keyword)),
-    secondaryAction?.keywords?.find((keyword) => trimmed.includes(keyword)),
-    tertiaryTone?.keywords?.find((keyword) => trimmed.includes(keyword)),
-  ].filter(Boolean);
+  const compositeKeywords = cleanKeywordList([
+    primarySymbol?.keywords?.find((keyword) => matchesKeyword(trimmed, keyword, tokens)),
+    secondaryAction?.keywords?.find((keyword) => matchesKeyword(trimmed, keyword, tokens)),
+    tertiaryTone?.keywords?.find((keyword) => matchesKeyword(trimmed, keyword, tokens)),
+  ].filter(Boolean));
   const learnedKeywords = getTopLearnedKeywords(6);
 
   if (!trimmed) {
@@ -437,8 +469,8 @@ const buildInterpretation = (text) => {
     wordCount >= 18 ? "핵심 장면이 보입니다. 감정의 전환 지점을 기록해 보세요." :
     "짧지만 선명한 인상이 있습니다. 가장 남는 장면을 한 문장으로 늘려 보세요.";
 
-  if (symbolHits.length > 0) {
-    const items = symbolHits.map((hit) => `<li>${hit.meaning}</li>`).join("");
+  if (primarySymbolOnly.length > 0) {
+    const items = primarySymbolOnly.map((hit) => `<li>${hit.meaning}</li>`).join("");
     sections.push(`
       <div>
         <h4>상징 해독</h4>
@@ -532,7 +564,8 @@ const buildInterpretation = (text) => {
     `);
   }
 
-  if (bodyHits.length > 0) {
+  if (!primarySymbol || primarySymbol.priority > 1) {
+    if (bodyHits.length > 0) {
     const items = bodyHits.map((hit) => `<li>${hit.meaning}</li>`).join("");
     sections.push(`
       <div>
@@ -541,9 +574,11 @@ const buildInterpretation = (text) => {
         ${bodyKeywords.length ? `<p class="muted">키워드: ${bodyKeywords.join(", ")}</p>` : ""}
       </div>
     `);
+    }
   }
 
-  if (environmentHits.length > 0) {
+  if (!primarySymbol || primarySymbol.priority > 1) {
+    if (environmentHits.length > 0) {
     const items = environmentHits.map((hit) => `<li>${hit.meaning}</li>`).join("");
     sections.push(`
       <div>
@@ -552,6 +587,7 @@ const buildInterpretation = (text) => {
         ${environmentKeywords.length ? `<p class="muted">키워드: ${environmentKeywords.join(", ")}</p>` : ""}
       </div>
     `);
+    }
   }
 
   ritualChapters.push(`
