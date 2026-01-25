@@ -1,14 +1,145 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>몽문서: 잠의 의식을 해독하다</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">몽</span>
+      <div>
+        <p class="brand-title">몽문서</p>
+        <p class="brand-sub">잠의 의식을 해독하는 작은 서고</p>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="#interpret">해독</a>
+      <a href="#symbols">상징서</a>
+      <a href="#ritual">의식</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text reveal">
+        <p class="eyebrow">밤의 징후를 기록하라</p>
+        <h1>꿈은 암호입니다. 해독은 당신의 의식에서 시작됩니다.</h1>
+        <p class="lead">
+          꿈의 장면을 기록하면 상징과 감정의 조각을 모아 해독의 실마리를 제안합니다.
+          예언이 아닌, 내면의 그림자를 비추는 의식적 기록입니다.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#interpret">지금 해독하기</a>
+          <button class="btn ghost" id="sampleDream" type="button">샘플 몽상 보기</button>
+        </div>
+      </div>
+      <div class="hero-card reveal">
+        <div class="card-header">
+          <p class="card-title">오늘의 기호 조각</p>
+          <span class="chip">봉인 해제</span>
+        </div>
+        <p class="card-body">
+          "문을 여는 꿈"은 봉인의 틈을 뜻합니다. 낯선 공간은 아직 밝혀지지 않은
+          내면의 방일 수 있어요.
+        </p>
+        <div class="card-footer">
+          <span>감정 부호</span>
+          <div class="tag-row">
+            <span class="tag">설렘</span>
+            <span class="tag">호기심</span>
+            <span class="tag">긴장</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="interpret" class="interpret">
+      <div class="panel reveal">
+        <div class="panel-header">
+          <h2>몽상 기록</h2>
+          <p>가능한 한 생생히 적어주세요. 인물, 장소, 색, 감정이 주문의 핵입니다.</p>
+        </div>
+        <form id="dreamForm">
+          <label for="dreamInput" class="sr-only">꿈 내용</label>
+          <textarea id="dreamInput" name="dream" rows="6" placeholder="예: 폭풍 속에서 등대를 찾았는데, 불빛이 점점 선명해졌다."></textarea>
+          <div class="form-row">
+            <button class="btn primary" type="submit">해독 만들기</button>
+            <button class="btn ghost" type="button" id="clearDream">지우기</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel result-panel reveal">
+        <div class="panel-header">
+          <h2>해독 결과</h2>
+          <p>자동 해독은 의식의 실마리입니다. 당신의 상황과 맞춰 읽어보세요.</p>
+        </div>
+        <div id="dreamOutput" class="dream-output">
+          <p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="symbols" class="symbols reveal">
+      <div class="section-title">
+        <h2>상징서: 자주 등장하는 기호</h2>
+        <p>꿈은 은유적 언어입니다. 아래 기호를 참고해 스스로의 맥락을 더해보세요.</p>
+      </div>
+      <div class="symbol-grid">
+        <article>
+          <h3>물</h3>
+          <p>감정의 깊이, 흐름, 억눌림 혹은 정화를 의미합니다.</p>
+        </article>
+        <article>
+          <h3>길</h3>
+          <p>선택, 목표, 변화의 과정. 갈림길은 내적 갈등일 수 있어요.</p>
+        </article>
+        <article>
+          <h3>비행</h3>
+          <p>자유, 탈출, 한계 돌파. 높이 날수록 책임도 커질 수 있습니다.</p>
+        </article>
+        <article>
+          <h3>집</h3>
+          <p>나의 심리적 기반. 방이 많을수록 탐색할 내면이 큽니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ritual" class="ritual reveal">
+      <div class="ritual-card">
+        <h2>오늘 밤의 의식</h2>
+        <p>잠들기 전, 가장 선명한 장면을 한 줄로 적어두세요. 아침에 다시 읽으면 몽문의
+          반복 패턴이 드러납니다.</p>
+        <div class="ritual-grid">
+          <div>
+            <p class="ritual-label">기록 시간</p>
+            <p class="ritual-value">잠들기 직전 1분</p>
+          </div>
+          <div>
+            <p class="ritual-label">질문</p>
+            <p class="ritual-value">나는 무엇을 숨겼나?</p>
+          </div>
+          <div>
+            <p class="ritual-label">행동</p>
+            <p class="ritual-value">숨을 고르고 장면을 다시 떠올리기</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>몽문서 · 꿈을 기록하는 은밀한 의식</p>
+  </footer>
+
   <script defer type="text/javascript" src="/main.js"></script>
 </body>
 </html>
