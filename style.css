@@ -459,6 +459,30 @@ textarea {
   max-width: 560px;
 }
 
+.guide-grid,
+.glossary-grid,
+.case-grid,
+.policy-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.guide-grid article,
+.glossary-grid article,
+.case-grid article,
+.policy-grid article {
+  background: rgba(32, 23, 16, 0.75);
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(191, 161, 119, 0.2);
+  box-shadow: 0 12px 20px rgba(12, 8, 5, 0.35);
+}
+
+.policy-grid article p {
+  color: #e1cdb2;
+}
+
 .symbol-grid {
   display: grid;
   gap: 16px;
