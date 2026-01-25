@@ -1,3 +1,28 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "REPLACE_ME",
+  authDomain: "REPLACE_ME",
+  projectId: "REPLACE_ME",
+  storageBucket: "REPLACE_ME",
+  messagingSenderId: "REPLACE_ME",
+  appId: "REPLACE_ME",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const commentsRef = collection(db, "comments");
+
 const dreamForm = document.querySelector("#dreamForm");
 const dreamInput = document.querySelector("#dreamInput");
 const dreamOutput = document.querySelector("#dreamOutput");
@@ -77,7 +102,6 @@ clearDreamButton.addEventListener("click", () => {
   dreamOutput.innerHTML = `<p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>`;
 });
 
-const commentStorageKey = "dreamComments";
 const commentModeKey = "dreamCommentMode";
 
 const escapeHtml = (value) =>
@@ -92,20 +116,7 @@ const escapeHtml = (value) =>
     return map[char];
   });
 
-const loadComments = () => {
-  try {
-    return JSON.parse(localStorage.getItem(commentStorageKey)) || [];
-  } catch (error) {
-    return [];
-  }
-};
-
-const saveComments = (comments) => {
-  localStorage.setItem(commentStorageKey, JSON.stringify(comments));
-};
-
-const renderComments = () => {
-  const comments = loadComments();
+const renderComments = (comments) => {
   if (comments.length === 0) {
     commentList.innerHTML = `<p class="muted">아직 댓글이 없습니다. 첫 번째 기록을 남겨보세요.</p>`;
     return;
@@ -142,13 +153,38 @@ commentForm.addEventListener("submit", (event) => {
   if (!text) {
     return;
   }
-  const comments = loadComments();
-  comments.unshift({ name, text, createdAt: Date.now() });
-  saveComments(comments.slice(0, 20));
-  commentText.value = "";
-  renderComments();
+  addDoc(commentsRef, { name, text, createdAt: serverTimestamp() })
+    .then(() => {
+      commentText.value = "";
+    })
+    .catch((error) => {
+      console.error("댓글 저장 실패:", error);
+    });
 });
 
 const initialMode = localStorage.getItem(commentModeKey) !== "off";
 setCommentMode(initialMode);
-renderComments();
+
+const subscribeComments = () => {
+  const commentQuery = query(commentsRef, orderBy("createdAt", "desc"), limit(20));
+  onSnapshot(
+    commentQuery,
+    (snapshot) => {
+      const comments = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          name: data.name || "익명",
+          text: data.text || "",
+          createdAt: data.createdAt,
+        };
+      });
+      renderComments(comments);
+    },
+    (error) => {
+      console.error("댓글 불러오기 실패:", error);
+      renderComments([]);
+    }
+  );
+};
+
+subscribeComments();
