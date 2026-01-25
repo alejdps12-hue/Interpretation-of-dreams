@@ -52,6 +52,34 @@ const prompts = [
   "이 상징을 깨웠을 때 어떤 행동을 해야 하나요?",
 ];
 
+const emotionMap = [
+  { keywords: ["두려움", "무서", "불안", "떨림", "공포", "위협"], meaning: "불확실한 상황에 대한 경계심이 커져 있습니다." },
+  { keywords: ["설렘", "기쁨", "행복", "웃음", "즐거움"], meaning: "기대감이 커지고 새로운 가능성에 마음이 열려 있습니다." },
+  { keywords: ["분노", "화", "짜증", "폭발"], meaning: "억눌린 감정이 표면으로 올라오고 있습니다." },
+  { keywords: ["슬픔", "눈물", "그리움", "허전"], meaning: "상실감이나 회복이 필요한 부분이 드러납니다." },
+  { keywords: ["평온", "안정", "고요", "차분"], meaning: "내면의 중심이 잡히고 회복의 흐름이 이어집니다." },
+];
+
+const settingMap = [
+  { keywords: ["바다", "호수", "강", "물"], meaning: "감정의 깊이를 비추는 배경입니다." },
+  { keywords: ["숲", "산", "나무"], meaning: "본능과 직관이 강조됩니다." },
+  { keywords: ["도시", "건물", "거리", "골목"], meaning: "사회적 역할과 관계가 주제입니다." },
+  { keywords: ["집", "방", "문"], meaning: "안전지대와 내면의 경계가 나타납니다." },
+  { keywords: ["학교", "시험", "수업"], meaning: "평가, 준비, 성장 과제가 떠오릅니다." },
+];
+
+const characterMap = [
+  { keywords: ["가족", "엄마", "아빠", "부모", "형", "누나", "동생"], meaning: "가까운 관계의 기대나 부담이 투영됩니다." },
+  { keywords: ["친구", "연인", "파트너"], meaning: "관계의 친밀함과 거리감이 동시에 드러납니다." },
+  { keywords: ["모르는", "낯선", "陌生"], meaning: "익숙하지 않은 감정이나 새로운 면모를 상징합니다." },
+];
+
+const timeMap = [
+  { keywords: ["밤", "어둠", "검은"], meaning: "무의식이 강하게 작동하는 시간대입니다." },
+  { keywords: ["아침", "햇살", "빛"], meaning: "전환과 회복의 신호가 나타납니다." },
+  { keywords: ["노을", "황혼", "저녁"], meaning: "마무리와 정리의 감각이 큽니다." },
+];
+
 const sampleDreams = [
   "어두운 골목을 걷다가 낯선 문을 열었더니 따뜻한 빛이 쏟아졌다.",
   "높은 산을 오르는데 갑자기 하늘로 떠올라 도시를 내려다보았다.",
@@ -59,28 +87,77 @@ const sampleDreams = [
   "촛불이 꺼지지 않는 방에서 낡은 거울이 나를 바라보았다.",
 ];
 
+const pickMatches = (text, map) =>
+  map.filter((item) => item.keywords.some((keyword) => text.includes(keyword)));
+
 const buildInterpretation = (text) => {
-  const hits = symbolMap.filter((item) =>
-    item.keywords.some((keyword) => text.includes(keyword))
-  );
+  const trimmed = text.trim();
+  const symbolHits = pickMatches(trimmed, symbolMap);
+  const emotionHits = pickMatches(trimmed, emotionMap);
+  const settingHits = pickMatches(trimmed, settingMap);
+  const characterHits = pickMatches(trimmed, characterMap);
+  const timeHits = pickMatches(trimmed, timeMap);
   const selectedPrompt = prompts[Math.floor(Math.random() * prompts.length)];
 
-  if (!text.trim()) {
+  if (!trimmed) {
     return `<p class="muted">꿈을 입력하면 해석을 만들 수 있어요.</p>`;
   }
 
-  if (hits.length === 0) {
+  const sections = [];
+
+  if (symbolHits.length > 0) {
+    const items = symbolHits.map((hit) => `<li>${hit.meaning}</li>`).join("");
+    sections.push(`
+      <div>
+        <h4>상징 해독</h4>
+        <ul>${items}</ul>
+      </div>
+    `);
+  }
+
+  if (emotionHits.length > 0) {
+    const items = emotionHits.map((hit) => `<li>${hit.meaning}</li>`).join("");
+    sections.push(`
+      <div>
+        <h4>감정의 온도</h4>
+        <ul>${items}</ul>
+      </div>
+    `);
+  }
+
+  if (settingHits.length > 0 || characterHits.length > 0 || timeHits.length > 0) {
+    const contextItems = [
+      ...settingHits.map((hit) => hit.meaning),
+      ...characterHits.map((hit) => hit.meaning),
+      ...timeHits.map((hit) => hit.meaning),
+    ];
+    if (contextItems.length > 0) {
+      sections.push(`
+        <div>
+          <h4>배경의 메시지</h4>
+          <ul>${contextItems.map((item) => `<li>${item}</li>`).join("")}</ul>
+        </div>
+      `);
+    }
+  }
+
+  if (sections.length === 0) {
     return `
       <h4>몽문의 흐름</h4>
-      <p>선명한 기호가 드러나지 않았습니다. 대신 분위기와 감정에 집중해 보세요.</p>
+      <p>선명한 기호가 드러나지 않았습니다. 대신 분위기와 감정의 단서를 다시 떠올려 보세요.</p>
       <p class="muted">질문: ${selectedPrompt}</p>
     `;
   }
 
-  const meanings = hits.map((hit) => `<li>${hit.meaning}</li>`).join("");
+  const wordCount = trimmed.split(/\s+/).length;
+  const intensity =
+    wordCount >= 35 ? "이미지와 서사가 풍부합니다. 반복되는 장면을 중심으로 해석을 이어가세요." :
+    wordCount >= 18 ? "핵심 장면이 보입니다. 감정의 전환 지점을 기록해 보세요." :
+    "짧지만 선명한 인상이 있습니다. 가장 남는 장면을 한 문장으로 늘려 보세요.";
+
   return `
-    <h4>몽문의 신호</h4>
-    <ul>${meanings}</ul>
+    ${sections.join("")}
+    <p class="muted">강도: ${intensity}</p>
     <p class="muted">질문: ${selectedPrompt}</p>
   `;
 };
