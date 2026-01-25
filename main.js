@@ -3,11 +3,14 @@ import {
   getFirestore,
   collection,
   addDoc,
+  deleteDoc,
+  doc,
   query,
   orderBy,
   limit,
   onSnapshot,
   serverTimestamp,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -203,8 +206,15 @@ const renderComments = (comments) => {
     .map(
       (comment) => `
         <div class="comment-item">
-          <strong>${escapeHtml(comment.name)}</strong>
+          <div class="comment-meta">
+            <strong>${escapeHtml(comment.name)}</strong>
+            ${comment.reported ? `<span class="comment-flag">신고됨</span>` : ""}
+          </div>
           <span>${escapeHtml(comment.text)}</span>
+          <div class="comment-actions">
+            <button class="comment-action delete" type="button" data-id="${comment.id}">삭제</button>
+            <button class="comment-action report" type="button" data-id="${comment.id}" ${comment.reported ? "disabled" : ""}>신고</button>
+          </div>
         </div>
       `
     )
@@ -230,13 +240,49 @@ commentForm.addEventListener("submit", (event) => {
   if (!text) {
     return;
   }
-  addDoc(commentsRef, { name, text, createdAt: serverTimestamp() })
+  addDoc(commentsRef, {
+    name,
+    text,
+    reported: false,
+    createdAt: serverTimestamp(),
+  })
     .then(() => {
       commentText.value = "";
     })
     .catch((error) => {
       console.error("댓글 저장 실패:", error);
     });
+});
+
+commentList.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) {
+    return;
+  }
+  const id = target.dataset.id;
+  if (!id) {
+    return;
+  }
+  const commentRef = doc(db, "comments", id);
+
+  if (target.classList.contains("delete")) {
+    const confirmed = window.confirm("이 댓글을 삭제할까요?");
+    if (!confirmed) {
+      return;
+    }
+    deleteDoc(commentRef).catch((error) => {
+      console.error("댓글 삭제 실패:", error);
+    });
+  }
+
+  if (target.classList.contains("report")) {
+    updateDoc(commentRef, {
+      reported: true,
+      reportedAt: serverTimestamp(),
+    }).catch((error) => {
+      console.error("댓글 신고 실패:", error);
+    });
+  }
 });
 
 const initialMode = localStorage.getItem(commentModeKey) !== "off";
@@ -247,11 +293,13 @@ const subscribeComments = () => {
   onSnapshot(
     commentQuery,
     (snapshot) => {
-      const comments = snapshot.docs.map((doc) => {
-        const data = doc.data();
+      const comments = snapshot.docs.map((docSnap) => {
+        const data = docSnap.data();
         return {
+          id: docSnap.id,
           name: data.name || "익명",
           text: data.text || "",
+          reported: Boolean(data.reported),
           createdAt: data.createdAt,
         };
       });

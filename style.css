@@ -426,6 +426,20 @@ textarea {
   gap: 6px;
 }
 
+.comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comment-flag {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(230, 120, 90, 0.5);
+  color: #f2b1a0;
+}
+
 .comment-item strong {
   font-size: 0.95rem;
 }
@@ -433,6 +447,33 @@ textarea {
 .comment-item span {
   color: #e6d3b8;
   font-size: 0.9rem;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.comment-action {
+  border: 1px solid rgba(214, 190, 150, 0.35);
+  background: rgba(26, 19, 12, 0.6);
+  color: #f0ddc2;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.comment-action.delete {
+  border-color: rgba(227, 128, 96, 0.5);
+  color: #f2b1a0;
+}
+
+.comment-action.report[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .ritual-card {
