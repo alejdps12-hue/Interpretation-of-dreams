@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="/style.css" rel="stylesheet">
+  <link href="./style.css" rel="stylesheet">
 </head>
 <body>
   <div class="orb orb-a" aria-hidden="true"></div>
@@ -86,6 +86,18 @@
           <p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>
         </div>
       </div>
+      <div class="panel history-panel reveal">
+        <div class="panel-header">
+          <h2>나의 해석 기록</h2>
+          <p>내가 받은 해몽을 모아두고 다시 확인할 수 있어요.</p>
+        </div>
+        <div id="historyList" class="history-list">
+          <p class="muted">아직 저장된 해석이 없습니다.</p>
+        </div>
+        <div class="history-actions">
+          <button class="btn ghost" type="button" id="clearHistory">책 지우기</button>
+        </div>
+      </div>
     </section>
 
     <section id="symbols" class="symbols reveal">
@@ -135,36 +147,12 @@
       </div>
     </section>
 
-    <section id="comments" class="comments reveal">
-      <div class="section-title">
-        <h2>댓글 모드</h2>
-        <p>꿈 해독 기록을 함께 나누고 싶다면 댓글 모드를 켜 보세요.</p>
-      </div>
-      <div class="comment-toggle">
-        <span>댓글 모드</span>
-        <button class="toggle-btn" id="commentToggle" type="button" aria-pressed="true">켜짐</button>
-      </div>
-      <div class="comment-panel" id="commentPanel">
-        <form id="commentForm">
-          <div class="comment-row">
-            <label for="commentName" class="sr-only">이름</label>
-            <input id="commentName" name="name" type="text" placeholder="이름" maxlength="20">
-            <label for="commentText" class="sr-only">댓글</label>
-            <input id="commentText" name="comment" type="text" placeholder="댓글을 남겨주세요" maxlength="120" required>
-            <button class="btn primary" type="submit">등록</button>
-          </div>
-        </form>
-        <div id="commentList" class="comment-list">
-          <p class="muted">아직 댓글이 없습니다. 첫 번째 기록을 남겨보세요.</p>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="site-footer">
     <p>몽문서 · 꿈을 기록하는 은밀한 의식</p>
   </footer>
 
-  <script defer type="module" src="/main.js"></script>
+  <script defer type="module" src="./main.js"></script>
 </body>
 </html>

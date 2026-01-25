@@ -1,42 +1,10 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  query,
-  orderBy,
-  limit,
-  onSnapshot,
-  serverTimestamp,
-  updateDoc,
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "REPLACE_ME",
-  projectId: "REPLACE_ME",
-  storageBucket: "REPLACE_ME",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const commentsRef = collection(db, "comments");
-
 const dreamForm = document.querySelector("#dreamForm");
 const dreamInput = document.querySelector("#dreamInput");
 const dreamOutput = document.querySelector("#dreamOutput");
 const sampleDreamButton = document.querySelector("#sampleDream");
 const clearDreamButton = document.querySelector("#clearDream");
-const commentToggle = document.querySelector("#commentToggle");
-const commentPanel = document.querySelector("#commentPanel");
-const commentForm = document.querySelector("#commentForm");
-const commentName = document.querySelector("#commentName");
-const commentText = document.querySelector("#commentText");
-const commentList = document.querySelector("#commentList");
+const historyList = document.querySelector("#historyList");
+const clearHistoryButton = document.querySelector("#clearHistory");
 
 const symbolMap = [
   { keywords: ["물", "바다", "파도", "비"], meaning: "감정의 파도가 출렁입니다. 최근의 감정이 정리되길 바라는 마음이 드러납니다." },
@@ -47,13 +15,88 @@ const symbolMap = [
   { keywords: ["숲", "나무", "길 잃다"], meaning: "불확실한 환경 속에서 길을 찾고 있습니다. 감각을 믿으라는 신호일 수 있습니다." },
 ];
 
-const prompts = [
-  "꿈에서 가장 강렬했던 감정은 무엇이었나요?",
-  "등장한 인물은 현재 삶의 어떤 관계를 닮았나요?",
-  "꿈의 색감이나 분위기는 당신의 에너지와 맞닿아 있나요?",
-  "그 장면은 당신이 숨기던 욕망을 비추고 있나요?",
-  "이 상징을 깨웠을 때 어떤 행동을 해야 하나요?",
+const insightLines = [
+  "꿈의 서사는 무의식이 현재의 균형을 조정하려는 방식입니다.",
+  "상징이 선명할수록 마음속 핵심 주제가 간결하게 드러납니다.",
+  "감정의 강도는 일상의 피로 혹은 갈망을 반영하는 경우가 많습니다.",
+  "장소의 질감은 현실에서 느끼는 안정감의 수준을 비추기도 합니다.",
+  "인물의 역할은 내면에서 자신이 맡고 있는 태도를 나타낼 수 있습니다.",
 ];
+
+const integrationLines = [
+  "해석은 정답이 아니라 자기 이해를 돕는 거울에 가깝습니다.",
+  "하나의 상징에 여러 의미가 겹칠 수 있으며 그 겹침이 핵심입니다.",
+  "불편한 장면일수록 현재의 중요한 감정이 숨어 있는 경우가 많습니다.",
+  "꿈의 흐름은 현실에서 미뤄둔 결정을 비추는 경우가 있습니다.",
+  "감정이 바뀌는 순간이 심리 전환의 중심이 됩니다.",
+];
+
+const closureLines = [
+  "오늘의 해석은 감정의 정리를 돕는 임시 지도입니다.",
+  "동일한 장면이 반복될수록 주제가 더 명료해집니다.",
+  "해석을 짧게 요약할수록 핵심이 드러납니다.",
+  "짧은 문장으로 정리해두면 다음 기록과 연결하기 쉽습니다.",
+  "지금의 해석은 새로운 선택을 위한 방향 표시가 됩니다.",
+];
+
+const historyStorageKey = "dreamInterpretationHistory";
+const maxHistoryItems = 12;
+
+const escapeHtml = (value) =>
+  value.replace(/[&<>"']/g, (char) => {
+    const map = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return map[char];
+  });
+
+const formatTimestamp = (timestamp) => {
+  const date = new Date(timestamp);
+  return Number.isNaN(date.getTime()) ? "기록됨" : date.toLocaleString("ko-KR");
+};
+
+const loadHistory = () => {
+  try {
+    const raw = localStorage.getItem(historyStorageKey);
+    if (!raw) {
+      return [];
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error("해석 기록 불러오기 실패:", error);
+    return [];
+  }
+};
+
+const saveHistory = (items) => {
+  localStorage.setItem(historyStorageKey, JSON.stringify(items));
+};
+
+const renderHistory = (items) => {
+  if (!historyList) {
+    return;
+  }
+  if (!items.length) {
+    historyList.innerHTML = `<p class="muted">아직 저장된 해석이 없습니다.</p>`;
+    return;
+  }
+  historyList.innerHTML = items
+    .map((item, index) => {
+      const snippet = item.text.length > 64 ? `${item.text.slice(0, 64)}…` : item.text;
+      return `
+        <button class="history-item" type="button" data-index="${index}" data-text="${encodeURIComponent(item.text)}">
+          <span class="history-snippet">${escapeHtml(snippet)}</span>
+          <span class="history-meta">${formatTimestamp(item.createdAt)}</span>
+        </button>
+      `;
+    })
+    .join("");
+};
 
 const emotionMap = [
   { keywords: ["두려움", "무서", "불안", "떨림", "공포", "위협"], meaning: "불확실한 상황에 대한 경계심이 커져 있습니다." },
@@ -93,6 +136,8 @@ const sampleDreams = [
 const pickMatches = (text, map) =>
   map.filter((item) => item.keywords.some((keyword) => text.includes(keyword)));
 
+const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
+
 const buildInterpretation = (text) => {
   const trimmed = text.trim();
   const symbolHits = pickMatches(trimmed, symbolMap);
@@ -100,13 +145,19 @@ const buildInterpretation = (text) => {
   const settingHits = pickMatches(trimmed, settingMap);
   const characterHits = pickMatches(trimmed, characterMap);
   const timeHits = pickMatches(trimmed, timeMap);
-  const selectedPrompt = prompts[Math.floor(Math.random() * prompts.length)];
 
   if (!trimmed) {
     return `<p class="muted">꿈을 입력하면 해석을 만들 수 있어요.</p>`;
   }
 
   const sections = [];
+  const detailChapters = [];
+  const summaryChapters = [];
+  const wordCount = trimmed.split(/\s+/).length;
+  const intensity =
+    wordCount >= 35 ? "이미지와 서사가 풍부합니다. 반복되는 장면을 중심으로 해석을 이어가세요." :
+    wordCount >= 18 ? "핵심 장면이 보입니다. 감정의 전환 지점을 기록해 보세요." :
+    "짧지만 선명한 인상이 있습니다. 가장 남는 장면을 한 문장으로 늘려 보세요.";
 
   if (symbolHits.length > 0) {
     const items = symbolHits.map((hit) => `<li>${hit.meaning}</li>`).join("");
@@ -114,6 +165,13 @@ const buildInterpretation = (text) => {
       <div>
         <h4>상징 해독</h4>
         <ul>${items}</ul>
+      </div>
+    `);
+    detailChapters.push(`
+      <div>
+        <h4>상징의 심리</h4>
+        <p>상징은 기억과 감정의 축약어입니다. 반복되는 기호는 현재 마음이 붙잡고 있는 질문을 드러냅니다.</p>
+        <p class="muted">${pickOne(insightLines)}</p>
       </div>
     `);
   }
@@ -124,6 +182,13 @@ const buildInterpretation = (text) => {
       <div>
         <h4>감정의 온도</h4>
         <ul>${items}</ul>
+      </div>
+    `);
+    detailChapters.push(`
+      <div>
+        <h4>감정의 흐름</h4>
+        <p>꿈 속 감정은 현실에서 표현되지 않은 감각의 여운일 수 있습니다. 꿈에서 감정이 바뀐 순간을 떠올리면 심리 전환의 실마리가 보입니다.</p>
+        <p class="muted">${pickOne(integrationLines)}</p>
       </div>
     `);
   }
@@ -142,32 +207,60 @@ const buildInterpretation = (text) => {
         </div>
       `);
     }
+    detailChapters.push(`
+      <div>
+        <h4>관계와 무대</h4>
+        <p>장소와 인물은 심리적 역할을 상징합니다. 낯선 사람은 새로운 자아, 익숙한 사람은 오래된 패턴일 가능성이 있습니다.</p>
+        <p class="muted">${pickOne(insightLines)}</p>
+      </div>
+    `);
+  }
+
+  const themeSignals = [];
+  if (symbolHits.length > 0) themeSignals.push("상징의 반복");
+  if (emotionHits.length > 0) themeSignals.push("감정의 잔향");
+  if (settingHits.length > 0) themeSignals.push("환경의 배경");
+  if (characterHits.length > 0) themeSignals.push("관계의 구조");
+  if (timeHits.length > 0) themeSignals.push("시간의 분위기");
+
+  if (themeSignals.length > 0) {
+    summaryChapters.push(`
+      <div>
+        <h4>심리 요약</h4>
+        <p>이번 꿈은 ${themeSignals.join(" · ")}가 겹쳐 드러난 장면입니다. 여러 층의 신호가 동시에 나타난 만큼, 최근 마음의 집중도가 높아졌을 가능성이 있습니다.</p>
+        <p class="muted">${pickOne(integrationLines)}</p>
+      </div>
+    `);
   }
 
   if (sections.length === 0) {
     return `
       <h4>몽문의 흐름</h4>
       <p>선명한 기호가 드러나지 않았습니다. 대신 분위기와 감정의 단서를 다시 떠올려 보세요.</p>
-      <p class="muted">질문: ${selectedPrompt}</p>
+      <p class="muted">해석 포인트: 분위기와 감정의 단서를 중심으로 다시 정리해 보세요.</p>
+      <p class="muted">${pickOne(closureLines)}</p>
     `;
   }
 
-  const wordCount = trimmed.split(/\s+/).length;
-  const intensity =
-    wordCount >= 35 ? "이미지와 서사가 풍부합니다. 반복되는 장면을 중심으로 해석을 이어가세요." :
-    wordCount >= 18 ? "핵심 장면이 보입니다. 감정의 전환 지점을 기록해 보세요." :
-    "짧지만 선명한 인상이 있습니다. 가장 남는 장면을 한 문장으로 늘려 보세요.";
-
   return `
     ${sections.join("")}
+    ${detailChapters.join("")}
+    ${summaryChapters.join("")}
     <p class="muted">강도: ${intensity}</p>
-    <p class="muted">질문: ${selectedPrompt}</p>
+    <p class="muted">해석 포인트: 꿈의 핵심 장면을 한 문장으로 요약해 보세요.</p>
+    <p class="muted">${pickOne(closureLines)}</p>
   `;
 };
 
 dreamForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const text = dreamInput.value.trim();
+  if (text) {
+    const historyItems = loadHistory();
+    historyItems.unshift({ text, createdAt: Date.now() });
+    saveHistory(historyItems.slice(0, maxHistoryItems));
+    renderHistory(historyItems.slice(0, maxHistoryItems));
+  }
   dreamOutput.innerHTML = buildInterpretation(text);
 });
 
@@ -182,134 +275,32 @@ clearDreamButton.addEventListener("click", () => {
   dreamOutput.innerHTML = `<p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>`;
 });
 
-const commentModeKey = "dreamCommentMode";
-
-const escapeHtml = (value) =>
-  value.replace(/[&<>"']/g, (char) => {
-    const map = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    };
-    return map[char];
+if (historyList) {
+  historyList.addEventListener("click", (event) => {
+    const target = event.target;
+    const button = target instanceof HTMLElement ? target.closest(".history-item") : null;
+    if (!button) {
+      return;
+    }
+    const encoded = button.dataset.text || "";
+    if (!encoded) {
+      return;
+    }
+    const decoded = decodeURIComponent(encoded);
+    dreamInput.value = decoded;
+    dreamOutput.innerHTML = buildInterpretation(decoded);
   });
+}
 
-const renderComments = (comments) => {
-  if (comments.length === 0) {
-    commentList.innerHTML = `<p class="muted">아직 댓글이 없습니다. 첫 번째 기록을 남겨보세요.</p>`;
-    return;
-  }
-
-  commentList.innerHTML = comments
-    .map(
-      (comment) => `
-        <div class="comment-item">
-          <div class="comment-meta">
-            <strong>${escapeHtml(comment.name)}</strong>
-            ${comment.reported ? `<span class="comment-flag">신고됨</span>` : ""}
-          </div>
-          <span>${escapeHtml(comment.text)}</span>
-          <div class="comment-actions">
-            <button class="comment-action delete" type="button" data-id="${comment.id}">삭제</button>
-            <button class="comment-action report" type="button" data-id="${comment.id}" ${comment.reported ? "disabled" : ""}>신고</button>
-          </div>
-        </div>
-      `
-    )
-    .join("");
-};
-
-const setCommentMode = (isOn) => {
-  commentPanel.style.display = isOn ? "grid" : "none";
-  commentToggle.setAttribute("aria-pressed", String(isOn));
-  commentToggle.textContent = isOn ? "켜짐" : "꺼짐";
-  localStorage.setItem(commentModeKey, isOn ? "on" : "off");
-};
-
-commentToggle.addEventListener("click", () => {
-  const isOn = commentToggle.getAttribute("aria-pressed") !== "true";
-  setCommentMode(isOn);
-});
-
-commentForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const name = commentName.value.trim() || "익명";
-  const text = commentText.value.trim();
-  if (!text) {
-    return;
-  }
-  addDoc(commentsRef, {
-    name,
-    text,
-    reported: false,
-    createdAt: serverTimestamp(),
-  })
-    .then(() => {
-      commentText.value = "";
-    })
-    .catch((error) => {
-      console.error("댓글 저장 실패:", error);
-    });
-});
-
-commentList.addEventListener("click", (event) => {
-  const target = event.target;
-  if (!(target instanceof HTMLElement)) {
-    return;
-  }
-  const id = target.dataset.id;
-  if (!id) {
-    return;
-  }
-  const commentRef = doc(db, "comments", id);
-
-  if (target.classList.contains("delete")) {
-    const confirmed = window.confirm("이 댓글을 삭제할까요?");
+if (clearHistoryButton) {
+  clearHistoryButton.addEventListener("click", () => {
+    const confirmed = window.confirm("책을 지우겠습니까?");
     if (!confirmed) {
       return;
     }
-    deleteDoc(commentRef).catch((error) => {
-      console.error("댓글 삭제 실패:", error);
-    });
-  }
+    saveHistory([]);
+    renderHistory([]);
+  });
+}
 
-  if (target.classList.contains("report")) {
-    updateDoc(commentRef, {
-      reported: true,
-      reportedAt: serverTimestamp(),
-    }).catch((error) => {
-      console.error("댓글 신고 실패:", error);
-    });
-  }
-});
-
-const initialMode = localStorage.getItem(commentModeKey) !== "off";
-setCommentMode(initialMode);
-
-const subscribeComments = () => {
-  const commentQuery = query(commentsRef, orderBy("createdAt", "desc"), limit(20));
-  onSnapshot(
-    commentQuery,
-    (snapshot) => {
-      const comments = snapshot.docs.map((docSnap) => {
-        const data = docSnap.data();
-        return {
-          id: docSnap.id,
-          name: data.name || "익명",
-          text: data.text || "",
-          reported: Boolean(data.reported),
-          createdAt: data.createdAt,
-        };
-      });
-      renderComments(comments);
-    },
-    (error) => {
-      console.error("댓글 불러오기 실패:", error);
-      renderComments([]);
-    }
-  );
-};
-
-subscribeComments();
+renderHistory(loadHistory());
