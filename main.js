@@ -235,7 +235,7 @@ const actionMap = [
 ];
 
 const bodyMap = [
-  { keywords: ["이가 빠지다", "치아", "이가 흔들리다", "이"], meaning: "자존감과 말의 표현에 대한 불안이 나타납니다." },
+  { keywords: ["이빨", "이가", "치아", "이가 빠지다", "이가 흔들리다"], meaning: "자존감과 말의 표현에 대한 불안이 나타납니다." },
   { keywords: ["눈이 안 보임", "시야 없음", "보이지 않다"], meaning: "현실을 회피하거나 확신이 부족한 상태일 수 있습니다." },
   { keywords: ["목소리 안 나옴", "말이 안 나옴", "소리가 안 나옴"], meaning: "표현 억제와 의사소통의 부담이 반영됩니다." },
   { keywords: ["다리가 안 움직임", "움직이지 않다"], meaning: "무력감이나 추진력 저하가 드러납니다." },
@@ -255,6 +255,105 @@ const environmentMap = [
   { keywords: ["지진", "흔들림"], meaning: "삶의 구조적 변화가 진행 중일 수 있습니다." },
 ];
 
+const primarySymbolMap = [
+  {
+    keywords: ["똥", "대변", "배설물"],
+    meaning: "불필요한 감정과 스트레스를 비워내려는 흐름이 나타납니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["피", "출혈"],
+    meaning: "에너지 소모와 감정적 고갈이 드러나는 강한 신호입니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["죽음", "사망", "장례", "부고"],
+    meaning: "끝과 시작의 전환이 강하게 드러나는 상징입니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["불", "화재"],
+    meaning: "격렬한 감정과 변화를 예고하는 상징입니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["물", "바다", "강", "호수"],
+    meaning: "감정의 깊이가 드러나고 내면의 흐름이 강조됩니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["시험", "시험지", "평가"],
+    meaning: "평가와 준비에 대한 부담이 핵심 주제로 나타납니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["추락", "떨어지다", "낙하"],
+    meaning: "통제력 상실과 실패에 대한 두려움이 강조됩니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["쫓기다", "추격", "도망"],
+    meaning: "압박과 회피가 동시에 작동하는 강한 신호입니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["집", "집이 무너지다", "붕괴"],
+    meaning: "심리적 안정 기반이 흔들리고 있다는 상징입니다.",
+    priority: 1,
+  },
+  {
+    keywords: ["이빨", "치아", "이가 빠지다", "이가 흔들리다"],
+    meaning: "자존감과 표현에 대한 민감성이 드러나는 상징입니다.",
+    priority: 2,
+  },
+  {
+    keywords: ["눈", "시야", "보이지 않다"],
+    meaning: "현실을 바라보는 관점이 흐려졌다는 신호일 수 있습니다.",
+    priority: 2,
+  },
+  {
+    keywords: ["머리", "두통"],
+    meaning: "생각과 판단의 과부하가 반영될 수 있습니다.",
+    priority: 2,
+  },
+  {
+    keywords: ["길", "갈림길"],
+    meaning: "선택과 방향에 대한 고민이 드러납니다.",
+    priority: 2,
+  },
+  {
+    keywords: ["숲", "미로", "헤매다"],
+    meaning: "혼란과 무의식의 신호가 강해진 상태입니다.",
+    priority: 2,
+  },
+];
+
+const secondaryActionMap = [
+  { keywords: ["나오다", "나온다", "배출", "토하다"], meaning: "감정과 스트레스가 밖으로 빠져나가는 과정입니다." },
+  { keywords: ["쌓이다", "가득", "넘치다"], meaning: "부담이 누적되어 정리 필요성이 커졌습니다." },
+  { keywords: ["숨기다", "가리다"], meaning: "감정을 억누르고 보호하려는 흐름이 나타납니다." },
+  { keywords: ["닦다", "씻다", "치우다"], meaning: "정리와 회복 욕구가 강하게 나타납니다." },
+  { keywords: ["떨어지다", "흘리다"], meaning: "통제력 상실에 대한 긴장이 반영됩니다." },
+  { keywords: ["삼키다", "먹다"], meaning: "감정을 안으로 눌러 담는 경향이 나타납니다." },
+  { keywords: ["싸우다", "부딪히다", "다투다"], meaning: "갈등을 드러내고 싶은 충동이 강해졌습니다." },
+  { keywords: ["도망치다", "피하다"], meaning: "책임과 감정을 피하려는 방어가 강합니다." },
+  { keywords: ["잡히다", "붙잡히다"], meaning: "압박을 피하지 못한 상태가 반영됩니다." },
+  { keywords: ["잃어버리다", "놓치다"], meaning: "중요한 것을 잃을까 하는 불안이 큽니다." },
+  { keywords: ["찾다", "발견"], meaning: "해답이나 돌파구를 찾으려는 흐름입니다." },
+  { keywords: ["닫다", "잠그다"], meaning: "관계나 감정을 닫고 보호하려는 의지가 있습니다." },
+];
+
+const tertiaryToneMap = [
+  { keywords: ["더럽다", "불쾌", "혐오"], meaning: "감정적으로 거부감이 커진 상태입니다." },
+  { keywords: ["후련", "시원", "가볍다"], meaning: "해소와 정리의 긍정적 신호가 나타납니다." },
+  { keywords: ["창피", "부끄", "수치"], meaning: "평판이나 이미지에 대한 걱정이 반영됩니다." },
+  { keywords: ["불안", "초조", "긴장"], meaning: "결과에 대한 불안이 높아져 있습니다." },
+  { keywords: ["공포", "두려움"], meaning: "회피하고 싶은 문제의 압력이 커졌습니다." },
+  { keywords: ["안도", "편안", "평온"], meaning: "안정감과 회복의 흐름이 뚜렷해졌습니다." },
+  { keywords: ["분노", "격분"], meaning: "억눌린 분노가 표면으로 올라오고 있습니다." },
+  { keywords: ["슬픔", "허전"], meaning: "상실감이 남아 있는 상태입니다." },
+];
+
 const sampleDreams = [
   "어두운 골목을 걷다가 낯선 문을 열었더니 따뜻한 빛이 쏟아졌다.",
   "높은 산을 오르는데 갑자기 하늘로 떠올라 도시를 내려다보았다.",
@@ -270,6 +369,20 @@ const listMatchedKeywords = (text, map) => {
   const unique = [...new Set(hits)];
   return unique.slice(0, 6);
 };
+
+const pickTopPrimarySymbol = (text) => {
+  const matches = primarySymbolMap.filter((item) =>
+    item.keywords.some((keyword) => text.includes(keyword))
+  );
+  if (matches.length === 0) {
+    return null;
+  }
+  matches.sort((a, b) => a.priority - b.priority);
+  return matches[0];
+};
+
+const pickFirstMatch = (text, map) =>
+  map.find((item) => item.keywords.some((keyword) => text.includes(keyword)));
 
 const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
 const pickMany = (list, count) => {
@@ -300,6 +413,14 @@ const buildInterpretation = (text) => {
   const actionKeywords = listMatchedKeywords(trimmed, actionMap);
   const bodyKeywords = listMatchedKeywords(trimmed, bodyMap);
   const environmentKeywords = listMatchedKeywords(trimmed, environmentMap);
+  const primarySymbol = pickTopPrimarySymbol(trimmed);
+  const secondaryAction = pickFirstMatch(trimmed, secondaryActionMap);
+  const tertiaryTone = pickFirstMatch(trimmed, tertiaryToneMap);
+  const compositeKeywords = [
+    primarySymbol?.keywords?.find((keyword) => trimmed.includes(keyword)),
+    secondaryAction?.keywords?.find((keyword) => trimmed.includes(keyword)),
+    tertiaryTone?.keywords?.find((keyword) => trimmed.includes(keyword)),
+  ].filter(Boolean);
   const learnedKeywords = getTopLearnedKeywords(6);
 
   if (!trimmed) {
@@ -439,6 +560,24 @@ const buildInterpretation = (text) => {
       ${pickMany(ritualLines, 2).map((line) => `<p class="muted">${line}</p>`).join("")}
     </div>
   `);
+
+  if (primarySymbol) {
+    const compositeLines = [];
+    compositeLines.push(primarySymbol.meaning);
+    if (secondaryAction) {
+      compositeLines.push(secondaryAction.meaning);
+    }
+    if (tertiaryTone) {
+      compositeLines.push(tertiaryTone.meaning);
+    }
+    sections.unshift(`
+      <div>
+        <h4>복합 키워드 해석</h4>
+        <p>${compositeLines.join(" ")}</p>
+        ${compositeKeywords.length ? `<p class="muted">키워드: ${compositeKeywords.join(", ")}</p>` : ""}
+      </div>
+    `);
+  }
 
   if (sections.length === 0) {
     return `
