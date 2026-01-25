@@ -3,6 +3,12 @@ const dreamInput = document.querySelector("#dreamInput");
 const dreamOutput = document.querySelector("#dreamOutput");
 const sampleDreamButton = document.querySelector("#sampleDream");
 const clearDreamButton = document.querySelector("#clearDream");
+const commentToggle = document.querySelector("#commentToggle");
+const commentPanel = document.querySelector("#commentPanel");
+const commentForm = document.querySelector("#commentForm");
+const commentName = document.querySelector("#commentName");
+const commentText = document.querySelector("#commentText");
+const commentList = document.querySelector("#commentList");
 
 const symbolMap = [
   { keywords: ["물", "바다", "파도", "비"], meaning: "감정의 파도가 출렁입니다. 최근의 감정이 정리되길 바라는 마음이 드러납니다." },
@@ -70,3 +76,79 @@ clearDreamButton.addEventListener("click", () => {
   dreamInput.value = "";
   dreamOutput.innerHTML = `<p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>`;
 });
+
+const commentStorageKey = "dreamComments";
+const commentModeKey = "dreamCommentMode";
+
+const escapeHtml = (value) =>
+  value.replace(/[&<>"']/g, (char) => {
+    const map = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return map[char];
+  });
+
+const loadComments = () => {
+  try {
+    return JSON.parse(localStorage.getItem(commentStorageKey)) || [];
+  } catch (error) {
+    return [];
+  }
+};
+
+const saveComments = (comments) => {
+  localStorage.setItem(commentStorageKey, JSON.stringify(comments));
+};
+
+const renderComments = () => {
+  const comments = loadComments();
+  if (comments.length === 0) {
+    commentList.innerHTML = `<p class="muted">아직 댓글이 없습니다. 첫 번째 기록을 남겨보세요.</p>`;
+    return;
+  }
+
+  commentList.innerHTML = comments
+    .map(
+      (comment) => `
+        <div class="comment-item">
+          <strong>${escapeHtml(comment.name)}</strong>
+          <span>${escapeHtml(comment.text)}</span>
+        </div>
+      `
+    )
+    .join("");
+};
+
+const setCommentMode = (isOn) => {
+  commentPanel.style.display = isOn ? "grid" : "none";
+  commentToggle.setAttribute("aria-pressed", String(isOn));
+  commentToggle.textContent = isOn ? "켜짐" : "꺼짐";
+  localStorage.setItem(commentModeKey, isOn ? "on" : "off");
+};
+
+commentToggle.addEventListener("click", () => {
+  const isOn = commentToggle.getAttribute("aria-pressed") !== "true";
+  setCommentMode(isOn);
+});
+
+commentForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = commentName.value.trim() || "익명";
+  const text = commentText.value.trim();
+  if (!text) {
+    return;
+  }
+  const comments = loadComments();
+  comments.unshift({ name, text, createdAt: Date.now() });
+  saveComments(comments.slice(0, 20));
+  commentText.value = "";
+  renderComments();
+});
+
+const initialMode = localStorage.getItem(commentModeKey) !== "off";
+setCommentMode(initialMode);
+renderComments();

@@ -134,6 +134,31 @@
         </div>
       </div>
     </section>
+
+    <section id="comments" class="comments reveal">
+      <div class="section-title">
+        <h2>댓글 모드</h2>
+        <p>꿈 해독 기록을 함께 나누고 싶다면 댓글 모드를 켜 보세요.</p>
+      </div>
+      <div class="comment-toggle">
+        <span>댓글 모드</span>
+        <button class="toggle-btn" id="commentToggle" type="button" aria-pressed="true">켜짐</button>
+      </div>
+      <div class="comment-panel" id="commentPanel">
+        <form id="commentForm">
+          <div class="comment-row">
+            <label for="commentName" class="sr-only">이름</label>
+            <input id="commentName" name="name" type="text" placeholder="이름" maxlength="20">
+            <label for="commentText" class="sr-only">댓글</label>
+            <input id="commentText" name="comment" type="text" placeholder="댓글을 남겨주세요" maxlength="120" required>
+            <button class="btn primary" type="submit">등록</button>
+          </div>
+        </form>
+        <div id="commentList" class="comment-list">
+          <p class="muted">아직 댓글이 없습니다. 첫 번째 기록을 남겨보세요.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
