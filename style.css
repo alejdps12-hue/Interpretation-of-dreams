@@ -355,11 +355,31 @@ textarea {
 .history-panel {
   display: grid;
   gap: 16px;
+  position: sticky;
+  top: 24px;
+  align-self: start;
 }
 
 .history-list {
   display: grid;
   gap: 10px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(214, 190, 150, 0.35);
+  border-radius: 999px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: rgba(20, 15, 10, 0.25);
+  border-radius: 999px;
 }
 
 .history-item {

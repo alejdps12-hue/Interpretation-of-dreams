@@ -69,7 +69,9 @@ const ritualLines = [
 ];
 
 const historyStorageKey = "dreamInterpretationHistory";
+const learnedKeywordsKey = "dreamLearnedKeywords";
 const maxHistoryItems = 12;
+const maxLearnedKeywords = 30;
 
 const escapeHtml = (value) =>
   value.replace(/[&<>"']/g, (char) => {
@@ -100,6 +102,51 @@ const loadHistory = () => {
     console.error("해석 기록 불러오기 실패:", error);
     return [];
   }
+};
+
+const loadLearnedKeywords = () => {
+  try {
+    const raw = localStorage.getItem(learnedKeywordsKey);
+    if (!raw) {
+      return {};
+    }
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (error) {
+    console.error("학습 키워드 불러오기 실패:", error);
+    return {};
+  }
+};
+
+const saveLearnedKeywords = (data) => {
+  localStorage.setItem(learnedKeywordsKey, JSON.stringify(data));
+};
+
+const updateLearnedKeywords = (text) => {
+  const tokens = text
+    .toLowerCase()
+    .replace(/[^0-9a-zA-Z가-힣\s]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length >= 2);
+  if (!tokens.length) {
+    return;
+  }
+  const learned = loadLearnedKeywords();
+  tokens.forEach((token) => {
+    learned[token] = (learned[token] || 0) + 1;
+  });
+  const sorted = Object.entries(learned)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 200);
+  saveLearnedKeywords(Object.fromEntries(sorted));
+};
+
+const getTopLearnedKeywords = (limit = 6) => {
+  const learned = loadLearnedKeywords();
+  return Object.entries(learned)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([word]) => word);
 };
 
 const saveHistory = (items) => {
@@ -253,6 +300,7 @@ const buildInterpretation = (text) => {
   const actionKeywords = listMatchedKeywords(trimmed, actionMap);
   const bodyKeywords = listMatchedKeywords(trimmed, bodyMap);
   const environmentKeywords = listMatchedKeywords(trimmed, environmentMap);
+  const learnedKeywords = getTopLearnedKeywords(6);
 
   if (!trimmed) {
     return `<p class="muted">꿈을 입력하면 해석을 만들 수 있어요.</p>`;
@@ -399,6 +447,7 @@ const buildInterpretation = (text) => {
       <p class="muted">해석 포인트: 분위기와 감정의 단서를 중심으로 정리하면 의미가 또렷해집니다.</p>
       ${pickMany(closureLines, 2).map((line) => `<p class="muted">${line}</p>`).join("")}
       ${ritualChapters.join("")}
+      ${learnedKeywords.length ? `<p class="muted">학습 키워드: ${learnedKeywords.join(", ")}</p>` : ""}
     `;
   }
 
@@ -410,6 +459,7 @@ const buildInterpretation = (text) => {
     <p class="muted">해석 포인트: 핵심 장면을 한 문장으로 요약하면 메시지가 또렷해집니다.</p>
     ${pickMany(closureLines, 2).map((line) => `<p class="muted">${line}</p>`).join("")}
     ${ritualChapters.join("")}
+    ${learnedKeywords.length ? `<p class="muted">학습 키워드: ${learnedKeywords.join(", ")}</p>` : ""}
   `;
 };
 
@@ -417,6 +467,7 @@ dreamForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const text = dreamInput.value.trim();
   if (text) {
+    updateLearnedKeywords(text);
     const historyItems = loadHistory();
     historyItems.unshift({ text, createdAt: Date.now() });
     saveHistory(historyItems.slice(0, maxHistoryItems));
