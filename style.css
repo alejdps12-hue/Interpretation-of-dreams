@@ -244,6 +244,22 @@ h1 {
   color: #f8eedc;
   border-color: #b28f60;
   box-shadow: 0 18px 35px rgba(10, 7, 4, 0.5);
+  font-size: 1.15rem;
+  padding: 16px 32px;
+  width: 100%;
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .hero-actions {
+    gap: 18px;
+  }
+
+  .hero-actions .hero-link {
+    flex: 1 1 100%;
+    padding: 20px 24px;
+    font-size: 1.3rem;
+  }
 }
 
 .btn:hover {
