@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>몽상 기록 - 몽문서</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="google-adsense-account" content="ca-pub-8165197041036892">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">몽</span>
+      <div>
+        <p class="brand-title">몽문서</p>
+        <p class="brand-sub">잠의 의식을 해독하는 작은 서고</p>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="interpret.html">해독</a>
+      <a href="fortune.html">운세</a>
+      <a href="index.html#symbols">상징서</a>
+      <a href="index.html#ritual">의식</a>
+      <a href="index.html#guide">가이드</a>
+      <a href="index.html#glossary">키워드</a>
+      <a href="index.html#cases">사례</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="interpret" class="interpret">
+      <div class="panel reveal">
+        <div class="panel-header">
+          <h2>몽상 기록</h2>
+          <p>가능한 한 생생히 적어주세요. 인물, 장소, 색, 감정이 주문의 핵입니다.</p>
+        </div>
+        <form id="dreamForm">
+          <label for="dreamInput" class="sr-only">꿈 내용</label>
+          <textarea id="dreamInput" name="dream" rows="6" placeholder="예: 폭풍 속에서 등대를 찾았는데, 불빛이 점점 선명해졌다."></textarea>
+          <div class="form-row">
+            <button class="btn primary" type="submit">해독 만들기</button>
+            <button class="btn ghost" type="button" id="sampleDream">샘플 몽상 보기</button>
+            <button class="btn ghost" type="button" id="clearDream">지우기</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel result-panel reveal">
+        <div class="panel-header">
+          <h2>해독 결과</h2>
+          <p>자동 해독은 의식의 실마리입니다. 당신의 상황과 맞춰 읽어보세요.</p>
+        </div>
+        <div id="dreamOutput" class="dream-output">
+          <p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>
+        </div>
+      </div>
+      <div class="panel history-panel reveal">
+        <div class="panel-header">
+          <h2>내가 만든 꿈의 페이지</h2>
+          <p>내가 만든 꿈 기록을 모아두고 다시 확인할 수 있어요.</p>
+        </div>
+        <div id="historyList" class="history-list">
+          <p class="muted">아직 저장된 해석이 없습니다.</p>
+        </div>
+        <div class="history-actions">
+          <button class="btn ghost" type="button" id="clearHistory">책 지우기</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./main.js"></script>
+</body>
+</html>

@@ -23,8 +23,8 @@
       </div>
     </div>
     <nav class="site-nav">
-      <a href="#interpret">해독</a>
-      <a href="#fortune">운세</a>
+      <a href="interpret.html">해독</a>
+      <a href="fortune.html">운세</a>
       <a href="#symbols">상징서</a>
       <a href="#ritual">의식</a>
       <a href="#guide">가이드</a>
@@ -44,8 +44,8 @@
           예언이 아닌, 내면의 그림자를 비추는 의식적 기록입니다.
         </p>
         <div class="hero-actions">
-          <a class="btn primary" href="#interpret">지금 해독하기</a>
-          <button class="btn ghost" id="sampleDream" type="button">샘플 몽상 보기</button>
+          <a class="btn primary" href="interpret.html">몽상 기록 시작</a>
+          <a class="btn ghost" href="fortune.html">오늘의 12간지 운세</a>
         </div>
       </div>
       <div class="hero-card reveal">
@@ -64,73 +64,6 @@
             <span class="tag">호기심</span>
             <span class="tag">긴장</span>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="interpret" class="interpret">
-      <div class="panel reveal">
-        <div class="panel-header">
-          <h2>몽상 기록</h2>
-          <p>가능한 한 생생히 적어주세요. 인물, 장소, 색, 감정이 주문의 핵입니다.</p>
-        </div>
-        <form id="dreamForm">
-          <label for="dreamInput" class="sr-only">꿈 내용</label>
-          <textarea id="dreamInput" name="dream" rows="6" placeholder="예: 폭풍 속에서 등대를 찾았는데, 불빛이 점점 선명해졌다."></textarea>
-          <div class="form-row">
-            <button class="btn primary" type="submit">해독 만들기</button>
-            <button class="btn ghost" type="button" id="clearDream">지우기</button>
-          </div>
-        </form>
-      </div>
-      <div class="panel result-panel reveal">
-        <div class="panel-header">
-          <h2>해독 결과</h2>
-          <p>자동 해독은 의식의 실마리입니다. 당신의 상황과 맞춰 읽어보세요.</p>
-        </div>
-        <div id="dreamOutput" class="dream-output">
-          <p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>
-        </div>
-      </div>
-      <div class="panel history-panel reveal">
-        <div class="panel-header">
-          <h2>내가 만든 꿈의 페이지</h2>
-          <p>내가 만든 꿈 기록을 모아두고 다시 확인할 수 있어요.</p>
-        </div>
-        <div id="historyList" class="history-list">
-          <p class="muted">아직 저장된 해석이 없습니다.</p>
-        </div>
-        <div class="history-actions">
-          <button class="btn ghost" type="button" id="clearHistory">책 지우기</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="fortune" class="fortune reveal">
-      <div class="section-title">
-        <h2>오늘의 12간지 운세</h2>
-        <p>자신의 띠를 골라보세요. 12간지의 기운을 빌려 오늘의 흐름을 전합니다.</p>
-      </div>
-      <div class="fortune-card">
-        <div class="fortune-controls">
-          <p class="fortune-label">띠 선택</p>
-          <div class="animal-chips" role="listbox" aria-label="띠 선택">
-            <button class="chip-button" type="button" data-animal="쥐" role="option" aria-selected="false">쥐</button>
-            <button class="chip-button" type="button" data-animal="소" role="option" aria-selected="false">소</button>
-            <button class="chip-button" type="button" data-animal="호랑이" role="option" aria-selected="false">호랑이</button>
-            <button class="chip-button" type="button" data-animal="토끼" role="option" aria-selected="false">토끼</button>
-            <button class="chip-button" type="button" data-animal="용" role="option" aria-selected="false">용</button>
-            <button class="chip-button" type="button" data-animal="뱀" role="option" aria-selected="false">뱀</button>
-            <button class="chip-button" type="button" data-animal="말" role="option" aria-selected="false">말</button>
-            <button class="chip-button" type="button" data-animal="양" role="option" aria-selected="false">양</button>
-            <button class="chip-button" type="button" data-animal="원숭이" role="option" aria-selected="false">원숭이</button>
-            <button class="chip-button" type="button" data-animal="닭" role="option" aria-selected="false">닭</button>
-            <button class="chip-button" type="button" data-animal="개" role="option" aria-selected="false">개</button>
-            <button class="chip-button" type="button" data-animal="돼지" role="option" aria-selected="false">돼지</button>
-          </div>
-        </div>
-        <div id="fortuneResult" class="fortune-result">
-          <p class="muted">띠를 고르면 오늘의 운세가 열립니다.</p>
         </div>
       </div>
     </section>

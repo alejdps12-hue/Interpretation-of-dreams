@@ -1057,29 +1057,35 @@ const buildInterpretation = (text) => {
   `;
 };
 
-dreamForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const text = dreamInput.value.trim();
-  if (text) {
-    updateLearnedKeywords(text);
-    const historyItems = loadHistory();
-    historyItems.unshift({ text, createdAt: Date.now() });
-    saveHistory(historyItems.slice(0, maxHistoryItems));
-    renderHistory(historyItems.slice(0, maxHistoryItems));
-  }
-  dreamOutput.innerHTML = buildInterpretation(text);
-});
+if (dreamForm && dreamInput && dreamOutput) {
+  dreamForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const text = dreamInput.value.trim();
+    if (text) {
+      updateLearnedKeywords(text);
+      const historyItems = loadHistory();
+      historyItems.unshift({ text, createdAt: Date.now() });
+      saveHistory(historyItems.slice(0, maxHistoryItems));
+      renderHistory(historyItems.slice(0, maxHistoryItems));
+    }
+    dreamOutput.innerHTML = buildInterpretation(text);
+  });
+}
 
-sampleDreamButton.addEventListener("click", () => {
-  const sample = sampleDreams[Math.floor(Math.random() * sampleDreams.length)];
-  dreamInput.value = sample;
-  dreamOutput.innerHTML = buildInterpretation(sample);
-});
+if (sampleDreamButton && dreamInput && dreamOutput) {
+  sampleDreamButton.addEventListener("click", () => {
+    const sample = sampleDreams[Math.floor(Math.random() * sampleDreams.length)];
+    dreamInput.value = sample;
+    dreamOutput.innerHTML = buildInterpretation(sample);
+  });
+}
 
-clearDreamButton.addEventListener("click", () => {
-  dreamInput.value = "";
-  dreamOutput.innerHTML = `<p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>`;
-});
+if (clearDreamButton && dreamInput && dreamOutput) {
+  clearDreamButton.addEventListener("click", () => {
+    dreamInput.value = "";
+    dreamOutput.innerHTML = `<p class="muted">아직 해독이 없습니다. 꿈을 입력하면 여기에 표시됩니다.</p>`;
+  });
+}
 
 if (historyList) {
   historyList.addEventListener("click", (event) => {

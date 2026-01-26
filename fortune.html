@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘의 12간지 운세 - 몽문서</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="google-adsense-account" content="ca-pub-8165197041036892">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">몽</span>
+      <div>
+        <p class="brand-title">몽문서</p>
+        <p class="brand-sub">잠의 의식을 해독하는 작은 서고</p>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="interpret.html">해독</a>
+      <a href="fortune.html">운세</a>
+      <a href="index.html#symbols">상징서</a>
+      <a href="index.html#ritual">의식</a>
+      <a href="index.html#guide">가이드</a>
+      <a href="index.html#glossary">키워드</a>
+      <a href="index.html#cases">사례</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="fortune reveal">
+      <div class="section-title">
+        <h2>오늘의 12간지 운세</h2>
+        <p>자신의 띠를 골라보세요. 12간지의 기운을 빌려 오늘의 흐름을 전합니다.</p>
+      </div>
+      <div class="fortune-card">
+        <div class="fortune-controls">
+          <p class="fortune-label">띠 선택</p>
+          <div class="animal-chips" role="listbox" aria-label="띠 선택">
+            <button class="chip-button" type="button" data-animal="쥐" role="option" aria-selected="false">쥐</button>
+            <button class="chip-button" type="button" data-animal="소" role="option" aria-selected="false">소</button>
+            <button class="chip-button" type="button" data-animal="호랑이" role="option" aria-selected="false">호랑이</button>
+            <button class="chip-button" type="button" data-animal="토끼" role="option" aria-selected="false">토끼</button>
+            <button class="chip-button" type="button" data-animal="용" role="option" aria-selected="false">용</button>
+            <button class="chip-button" type="button" data-animal="뱀" role="option" aria-selected="false">뱀</button>
+            <button class="chip-button" type="button" data-animal="말" role="option" aria-selected="false">말</button>
+            <button class="chip-button" type="button" data-animal="양" role="option" aria-selected="false">양</button>
+            <button class="chip-button" type="button" data-animal="원숭이" role="option" aria-selected="false">원숭이</button>
+            <button class="chip-button" type="button" data-animal="닭" role="option" aria-selected="false">닭</button>
+            <button class="chip-button" type="button" data-animal="개" role="option" aria-selected="false">개</button>
+            <button class="chip-button" type="button" data-animal="돼지" role="option" aria-selected="false">돼지</button>
+          </div>
+        </div>
+        <div id="fortuneResult" class="fortune-result">
+          <p class="muted">띠를 고르면 오늘의 운세가 열립니다.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./main.js"></script>
+</body>
+</html>
