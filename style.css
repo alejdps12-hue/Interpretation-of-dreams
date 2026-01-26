@@ -492,6 +492,87 @@ textarea {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
+.fortune {
+  display: grid;
+  gap: 24px;
+}
+
+.fortune-card {
+  background: rgba(24, 18, 12, 0.65);
+  border-radius: 20px;
+  padding: clamp(22px, 4vw, 32px);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(216, 198, 171, 0.08);
+  display: grid;
+  gap: 20px;
+}
+
+.fortune-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #d8c6ab;
+  margin-bottom: 8px;
+}
+
+.animal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.chip-button {
+  border: 1px solid rgba(220, 200, 170, 0.3);
+  background: transparent;
+  color: #e8d7bd;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border 0.2s ease;
+}
+
+.chip-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 240, 210, 0.6);
+}
+
+.chip-button.active {
+  background: #f1e1c6;
+  color: #2a1d13;
+  border-color: rgba(255, 240, 210, 0.8);
+}
+
+.fortune-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fortune-result {
+  background: rgba(15, 10, 6, 0.5);
+  border-radius: 16px;
+  padding: 18px 20px;
+  border: 1px solid rgba(216, 198, 171, 0.12);
+  display: grid;
+  gap: 10px;
+  min-height: 120px;
+}
+
+.fortune-result h3 {
+  font-size: 1.2rem;
+}
+
+.fortune-score {
+  font-size: 0.9rem;
+  color: #e9d7bb;
+}
+
+.fortune-list {
+  display: grid;
+  gap: 6px;
+  color: #f2e6d4;
+}
+
 .extended-actions {
   display: flex;
   justify-content: flex-start;

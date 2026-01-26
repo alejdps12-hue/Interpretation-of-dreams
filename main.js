@@ -33,6 +33,123 @@ if (shouldLoadAdsense()) {
   loadAdsense();
 }
 
+const fortuneResult = document.querySelector("#fortuneResult");
+const drawFortuneButton = document.querySelector("#drawFortune");
+const animalChips = Array.from(document.querySelectorAll(".chip-button"));
+let selectedAnimal = "";
+
+const fortuneProfiles = {
+  "용": {
+    theme: "큰 결단과 확장",
+    vibe: "지금의 선택은 큰 흐름을 바꿀 수 있습니다.",
+  },
+  "호랑이": {
+    theme: "담대함과 경쟁",
+    vibe: "주저함을 내려놓는 순간 기회가 열립니다.",
+  },
+  "여우": {
+    theme: "기민한 통찰",
+    vibe: "관계를 읽는 눈이 예민해집니다.",
+  },
+  "부엉이": {
+    theme: "집중과 지혜",
+    vibe: "정보를 모아 한 번에 정리하는 날입니다.",
+  },
+  "말": {
+    theme: "이동과 추진",
+    vibe: "속도를 올리면 성과가 빨라질 수 있습니다.",
+  },
+  "돼지": {
+    theme: "풍요와 결실",
+    vibe: "작은 기회가 금전 흐름으로 이어집니다.",
+  },
+  "토끼": {
+    theme: "호감과 기회",
+    vibe: "사소한 친절이 행운을 부릅니다.",
+  },
+  "고양이": {
+    theme: "감각과 거리",
+    vibe: "마음의 경계를 지키면 안정감이 커집니다.",
+  },
+  "늑대": {
+    theme: "집중과 경계",
+    vibe: "신호를 빠르게 읽으면 위험을 피합니다.",
+  },
+};
+
+const fortuneLines = {
+  luck: [
+    "예상치 못한 제안이 들어올 수 있습니다.",
+    "오래 미뤄둔 일이 자연스럽게 풀립니다.",
+    "협업에서 강점이 드러나는 날입니다.",
+    "작은 행운이 여러 번 겹칠 수 있습니다.",
+  ],
+  caution: [
+    "급한 결정은 한 템포 늦춰보세요.",
+    "감정이 과열되면 기회를 놓칠 수 있습니다.",
+    "불필요한 지출을 경계하는 게 좋습니다.",
+    "말보다 행동이 신뢰를 만듭니다.",
+  ],
+  action: [
+    "핵심 목표 하나만 선명히 고르세요.",
+    "오늘은 정리보다 실행이 유리합니다.",
+    "조용한 시간에 계획을 세우면 좋습니다.",
+    "중요한 연락은 오전에 먼저 시도해 보세요.",
+  ],
+};
+
+const pickLine = (list) => list[Math.floor(Math.random() * list.length)];
+
+const renderFortune = (animal) => {
+  if (!fortuneResult) {
+    return;
+  }
+  const profile = fortuneProfiles[animal];
+  if (!profile) {
+    fortuneResult.innerHTML = '<p class="muted">동물을 먼저 선택하세요.</p>';
+    return;
+  }
+  const score = 70 + Math.floor(Math.random() * 26);
+  const luck = pickLine(fortuneLines.luck);
+  const caution = pickLine(fortuneLines.caution);
+  const action = pickLine(fortuneLines.action);
+  fortuneResult.innerHTML = "";
+  const title = document.createElement("h3");
+  title.textContent = `${animal}의 운세`;
+  const meta = document.createElement("p");
+  meta.className = "fortune-score";
+  meta.textContent = `운세 지수 ${score} · ${profile.theme}`;
+  const vibe = document.createElement("p");
+  vibe.textContent = profile.vibe;
+  const list = document.createElement("div");
+  list.className = "fortune-list";
+  const itemLuck = document.createElement("p");
+  itemLuck.textContent = `행운: ${luck}`;
+  const itemCaution = document.createElement("p");
+  itemCaution.textContent = `주의: ${caution}`;
+  const itemAction = document.createElement("p");
+  itemAction.textContent = `행동: ${action}`;
+  list.append(itemLuck, itemCaution, itemAction);
+  fortuneResult.append(title, meta, vibe, list);
+};
+
+animalChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    selectedAnimal = chip.dataset.animal || "";
+    animalChips.forEach((btn) => {
+      const isActive = btn === chip;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+  });
+});
+
+if (drawFortuneButton) {
+  drawFortuneButton.addEventListener("click", () => {
+    renderFortune(selectedAnimal);
+  });
+}
+
 const animalSummaryLine = "동물의 꿈은 지금 당신의 본능과 에너지 상태를 보여줍니다.";
 
 const animalSummaryKeywords = [
