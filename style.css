@@ -244,7 +244,7 @@ h1 {
   color: #f8eedc;
   border-color: #b28f60;
   box-shadow: 0 18px 35px rgba(10, 7, 4, 0.5);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   padding: 16px 32px;
   width: 100%;
   text-align: center;
@@ -258,7 +258,7 @@ h1 {
   .hero-actions .hero-link {
     flex: 1 1 100%;
     padding: 20px 24px;
-    font-size: 1.3rem;
+    font-size: 1.35rem;
   }
 }
 
@@ -357,6 +357,21 @@ textarea {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.text-input {
+  flex: 1 1 200px;
+  min-width: 180px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(191, 161, 119, 0.35);
+  background: rgba(18, 13, 9, 0.7);
+  color: #f6ead7;
+  font-size: 0.95rem;
+}
+
+.text-input::placeholder {
+  color: rgba(214, 195, 166, 0.7);
 }
 
 .dream-output {
@@ -530,6 +545,38 @@ textarea {
   gap: 20px;
 }
 
+.toggle-row {
+  display: inline-flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.toggle-button {
+  border: 1px solid rgba(220, 200, 170, 0.3);
+  background: transparent;
+  color: #e8d7bd;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border 0.2s ease;
+}
+
+.toggle-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 240, 210, 0.6);
+}
+
+.toggle-button.active {
+  background: #f1e1c6;
+  color: #2a1d13;
+  border-color: rgba(255, 240, 210, 0.8);
+}
+
+.is-hidden-panel {
+  display: none;
+}
+
 .fortune-label {
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -589,6 +636,21 @@ textarea {
   display: grid;
   gap: 6px;
   color: #f2e6d4;
+}
+
+.fortune-color {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f2e6d4;
+}
+
+.color-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 2px rgba(12, 8, 5, 0.5);
 }
 
 .extended-actions {
