@@ -5,6 +5,33 @@ const sampleDreamButton = document.querySelector("#sampleDream");
 const clearDreamButton = document.querySelector("#clearDream");
 const historyList = document.querySelector("#historyList");
 const clearHistoryButton = document.querySelector("#clearHistory");
+const adsenseClientId = "ca-pub-8165197041036892";
+const adsenseMinText = 600;
+
+const shouldLoadAdsense = () => {
+  const main = document.querySelector("main");
+  if (!main) {
+    return false;
+  }
+  const text = main.innerText.replace(/\s+/g, " ").trim();
+  return text.length >= adsenseMinText;
+};
+
+const loadAdsense = () => {
+  if (document.querySelector('script[data-adsense="auto"]')) {
+    return;
+  }
+  const script = document.createElement("script");
+  script.async = true;
+  script.dataset.adsense = "auto";
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`;
+  script.crossOrigin = "anonymous";
+  document.head.appendChild(script);
+};
+
+if (shouldLoadAdsense()) {
+  loadAdsense();
+}
 
 const animalSummaryLine = "동물의 꿈은 지금 당신의 본능과 에너지 상태를 보여줍니다.";
 
