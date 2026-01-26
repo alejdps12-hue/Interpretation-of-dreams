@@ -109,6 +109,26 @@ const fortuneLines = {
   ],
 };
 
+const fortuneColors = [
+  { name: "연한 금빛", hex: "#f1d28a", emoji: "🟡" },
+  { name: "밤하늘 남색", hex: "#2b3a67", emoji: "🔵" },
+  { name: "살구빛", hex: "#f4b49b", emoji: "🟠" },
+  { name: "짙은 청록", hex: "#1f6f78", emoji: "🔵" },
+  { name: "부드러운 녹차", hex: "#8fb36b", emoji: "🟢" },
+  { name: "자줏빛 밤", hex: "#5a2a4a", emoji: "🟣" },
+  { name: "모래 베이지", hex: "#d8bf8a", emoji: "🟡" },
+  { name: "코랄 레드", hex: "#d6634b", emoji: "🔴" },
+  { name: "연한 라일락", hex: "#b39ddb", emoji: "🟣" },
+  { name: "깊은 남녹", hex: "#1f4d3a", emoji: "🟢" },
+  { name: "바다빛", hex: "#2e7cc4", emoji: "🔵" },
+  { name: "라임 옐로", hex: "#c6d65b", emoji: "🟢" },
+];
+
+const pickColor = (seed) => {
+  const hash = hashString(seed);
+  return fortuneColors[hash % fortuneColors.length];
+};
+
 const dateSeed = () => {
   const now = new Date();
   const year = now.getFullYear();
@@ -145,6 +165,7 @@ const renderFortune = (animal) => {
   const luck = pickLine(fortuneLines.luck, `${animal}-${today}-luck`);
   const caution = pickLine(fortuneLines.caution, `${animal}-${today}-caution`);
   const action = pickLine(fortuneLines.action, `${animal}-${today}-action`);
+  const color = pickColor(`${animal}-${today}-color`);
   fortuneResult.innerHTML = "";
   const title = document.createElement("h3");
   title.textContent = `${animal}띠 오늘의 운세`;
@@ -153,6 +174,9 @@ const renderFortune = (animal) => {
   meta.textContent = `운세 지수 ${score} · ${profile.theme}`;
   const vibe = document.createElement("p");
   vibe.textContent = profile.vibe;
+  const colorLine = document.createElement("p");
+  colorLine.className = "fortune-color";
+  colorLine.innerHTML = `행운의 색: ${color.emoji} <span class="color-swatch" style="background:${color.hex}"></span>${color.name}`;
   const list = document.createElement("div");
   list.className = "fortune-list";
   const itemLuck = document.createElement("p");
@@ -162,7 +186,216 @@ const renderFortune = (animal) => {
   const itemAction = document.createElement("p");
   itemAction.textContent = `행동: ${action}`;
   list.append(itemLuck, itemCaution, itemAction);
-  fortuneResult.append(title, meta, vibe, list);
+  fortuneResult.append(title, meta, vibe, colorLine, list);
+};
+
+const astroResult = document.querySelector("#astroResult");
+const astroChips = Array.from(document.querySelectorAll(".astro-chip"));
+let selectedAstro = "";
+
+const astroProfiles = {
+  "양자리": { theme: "돌파와 시작", vibe: "새로운 계획을 바로 실행하기 좋은 날입니다." },
+  "황소자리": { theme: "안정과 누적", vibe: "차분히 쌓아온 것이 빛을 보기 시작합니다." },
+  "쌍둥이자리": { theme: "소통과 연결", vibe: "대화 속에서 길이 열립니다." },
+  "게자리": { theme: "감정과 돌봄", vibe: "내 마음을 다독이면 관계가 부드러워집니다." },
+  "사자자리": { theme: "자신감과 표현", vibe: "드러낼수록 주목이 따릅니다." },
+  "처녀자리": { theme: "정리와 집중", vibe: "디테일을 다듬으면 결과가 선명해집니다." },
+  "천칭자리": { theme: "균형과 선택", vibe: "조율을 잘하면 갈등이 줄어듭니다." },
+  "전갈자리": { theme: "직관과 몰입", vibe: "한 가지에 집중하면 깊이가 생깁니다." },
+  "사수자리": { theme: "확장과 이동", vibe: "시야를 넓히면 기회가 보입니다." },
+  "염소자리": { theme: "책임과 성취", vibe: "조용히 밀면 성과가 뒤따릅니다." },
+  "물병자리": { theme: "아이디어와 변화", vibe: "새로운 방식이 답이 됩니다." },
+  "물고기자리": { theme: "감성과 휴식", vibe: "쉼을 가지면 방향이 또렷해집니다." },
+};
+
+const loveResult = document.querySelector("#loveResult");
+const loveNameA = document.querySelector("#loveNameA");
+const loveNameB = document.querySelector("#loveNameB");
+const loveDrawButton = document.querySelector("#loveDraw");
+const toggleLoveButton = document.querySelector("#toggleLove");
+const toggleCompatButton = document.querySelector("#toggleCompat");
+const lovePanel = document.querySelector("#lovePanel");
+const compatPanel = document.querySelector("#compatPanel");
+
+const loveThemes = [
+  "서로의 템포 맞추기",
+  "믿음과 응원",
+  "솔직한 대화",
+  "작은 배려의 힘",
+  "다시 가까워지는 시기",
+  "공동 목표 만들기",
+];
+
+const loveLines = {
+  vibe: [
+    "오늘은 마음의 간극을 좁히기 좋은 날입니다.",
+    "작은 말 한마디가 분위기를 부드럽게 합니다.",
+    "상대의 리듬을 존중하면 더 편안해집니다.",
+    "공감이 깊어질수록 신뢰가 올라갑니다.",
+  ],
+  action: [
+    "미뤄둔 이야기를 짧게라도 나눠보세요.",
+    "서로가 좋아하는 것을 하나씩 공유해 보세요.",
+    "오늘은 고마움을 표현하는 것이 좋습니다.",
+    "함께할 수 있는 간단한 계획을 잡아보세요.",
+  ],
+  caution: [
+    "감정이 격해지면 잠시 쉬어가세요.",
+    "추측보다는 확인이 더 안전합니다.",
+    "서로의 시간을 존중하는 것이 중요합니다.",
+    "말보다 표정에 마음이 드러날 수 있습니다.",
+  ],
+};
+
+const compatResult = document.querySelector("#compatResult");
+const compatNameA = document.querySelector("#compatNameA");
+const compatNameB = document.querySelector("#compatNameB");
+const compatDrawButton = document.querySelector("#compatDraw");
+
+const compatThemes = [
+  "불꽃 같은 긴장",
+  "선 넘는 설렘",
+  "은근한 집착",
+  "위태로운 끌림",
+  "숨겨진 호기심",
+  "확 끌어당김",
+];
+
+const compatLines = {
+  vibe: [
+    "눈빛만 스쳐도 텐션이 올라가는 날입니다.",
+    "말 한마디에 심장이 먼저 반응할 수 있습니다.",
+    "금지된 듯한 끌림이 오히려 재미를 더합니다.",
+    "서로의 반응을 시험하는 분위기가 감돕니다.",
+  ],
+  action: [
+    "평소보다 과감한 한 마디가 분위기를 바꿉니다.",
+    "서로의 약점을 살짝 건드리는 장난이 통할 수 있습니다.",
+    "약속 시간을 살짝 늦추는 밀당이 효과적입니다.",
+    "둘만의 비밀을 하나 공유해 보세요.",
+  ],
+  caution: [
+    "장난이 과해지면 선을 넘을 수 있습니다.",
+    "불필요한 질투는 분위기를 식힐 수 있습니다.",
+    "확인 없이 떠보면 오해가 생길 수 있습니다.",
+    "감정 표현은 솔직하되 공격적이지 않게 하세요.",
+  ],
+};
+
+const renderLove = () => {
+  if (!loveResult || !loveNameA || !loveNameB) {
+    return;
+  }
+  const nameA = loveNameA.value.trim();
+  const nameB = loveNameB.value.trim();
+  if (!nameA || !nameB) {
+    loveResult.innerHTML = '<p class="muted">두 사람의 이름을 모두 입력하세요.</p>';
+    return;
+  }
+  const today = dateSeed();
+  const seed = `${nameA}-${nameB}-${today}`;
+  const score = 60 + (hashString(`${seed}-score`) % 36);
+  const theme = loveThemes[hashString(`${seed}-theme`) % loveThemes.length];
+  const vibe = pickLine(loveLines.vibe, `${seed}-vibe`);
+  const action = pickLine(loveLines.action, `${seed}-action`);
+  const caution = pickLine(loveLines.caution, `${seed}-caution`);
+  const color = pickColor(`${seed}-color`);
+  loveResult.innerHTML = "";
+  const title = document.createElement("h3");
+  title.textContent = `${nameA} · ${nameB} 애정운`;
+  const meta = document.createElement("p");
+  meta.className = "fortune-score";
+  meta.textContent = `애정운 지수 ${score} · ${theme}`;
+  const vibeLine = document.createElement("p");
+  vibeLine.textContent = vibe;
+  const colorLine = document.createElement("p");
+  colorLine.className = "fortune-color";
+  colorLine.innerHTML = `행운의 색: ${color.emoji} <span class="color-swatch" style="background:${color.hex}"></span>${color.name}`;
+  const list = document.createElement("div");
+  list.className = "fortune-list";
+  const itemAction = document.createElement("p");
+  itemAction.textContent = `행동: ${action}`;
+  const itemCaution = document.createElement("p");
+  itemCaution.textContent = `주의: ${caution}`;
+  list.append(itemAction, itemCaution);
+  loveResult.append(title, meta, vibeLine, colorLine, list);
+};
+
+const renderCompat = () => {
+  if (!compatResult || !compatNameA || !compatNameB) {
+    return;
+  }
+  const nameA = compatNameA.value.trim();
+  const nameB = compatNameB.value.trim();
+  if (!nameA || !nameB) {
+    compatResult.innerHTML = '<p class="muted">두 사람의 이름을 모두 입력하세요.</p>';
+    return;
+  }
+  const today = dateSeed();
+  const seed = `${nameA}-${nameB}-${today}`;
+  const score = 55 + (hashString(`${seed}-score`) % 41);
+  const theme = compatThemes[hashString(`${seed}-theme`) % compatThemes.length];
+  const vibe = pickLine(compatLines.vibe, `${seed}-vibe`);
+  const action = pickLine(compatLines.action, `${seed}-action`);
+  const caution = pickLine(compatLines.caution, `${seed}-caution`);
+  const color = pickColor(`${seed}-color`);
+  compatResult.innerHTML = "";
+  const title = document.createElement("h3");
+  title.textContent = `${nameA} · ${nameB} 속궁합`;
+  const meta = document.createElement("p");
+  meta.className = "fortune-score";
+  meta.textContent = `궁합 지수 ${score} · ${theme}`;
+  const vibeLine = document.createElement("p");
+  vibeLine.textContent = vibe;
+  const colorLine = document.createElement("p");
+  colorLine.className = "fortune-color";
+  colorLine.innerHTML = `행운의 색: ${color.emoji} <span class="color-swatch" style="background:${color.hex}"></span>${color.name}`;
+  const list = document.createElement("div");
+  list.className = "fortune-list";
+  const itemAction = document.createElement("p");
+  itemAction.textContent = `행동: ${action}`;
+  const itemCaution = document.createElement("p");
+  itemCaution.textContent = `주의: ${caution}`;
+  list.append(itemAction, itemCaution);
+  compatResult.append(title, meta, vibeLine, colorLine, list);
+};
+
+const renderAstro = (sign) => {
+  if (!astroResult) {
+    return;
+  }
+  const profile = astroProfiles[sign];
+  if (!profile) {
+    astroResult.innerHTML = '<p class="muted">별자리를 먼저 선택하세요.</p>';
+    return;
+  }
+  const today = dateSeed();
+  const score = 70 + (hashString(`${sign}-${today}-score`) % 26);
+  const luck = pickLine(fortuneLines.luck, `${sign}-${today}-luck`);
+  const caution = pickLine(fortuneLines.caution, `${sign}-${today}-caution`);
+  const action = pickLine(fortuneLines.action, `${sign}-${today}-action`);
+  const color = pickColor(`${sign}-${today}-color`);
+  astroResult.innerHTML = "";
+  const title = document.createElement("h3");
+  title.textContent = `${sign} 오늘의 운세`;
+  const meta = document.createElement("p");
+  meta.className = "fortune-score";
+  meta.textContent = `운세 지수 ${score} · ${profile.theme}`;
+  const vibe = document.createElement("p");
+  vibe.textContent = profile.vibe;
+  const colorLine = document.createElement("p");
+  colorLine.className = "fortune-color";
+  colorLine.innerHTML = `행운의 색: ${color.emoji} <span class="color-swatch" style="background:${color.hex}"></span>${color.name}`;
+  const list = document.createElement("div");
+  list.className = "fortune-list";
+  const itemLuck = document.createElement("p");
+  itemLuck.textContent = `행운: ${luck}`;
+  const itemCaution = document.createElement("p");
+  itemCaution.textContent = `주의: ${caution}`;
+  const itemAction = document.createElement("p");
+  itemAction.textContent = `행동: ${action}`;
+  list.append(itemLuck, itemCaution, itemAction);
+  astroResult.append(title, meta, vibe, colorLine, list);
 };
 
 animalChips.forEach((chip) => {
@@ -176,6 +409,41 @@ animalChips.forEach((chip) => {
     renderFortune(selectedAnimal);
   });
 });
+
+astroChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    selectedAstro = chip.dataset.astro || "";
+    astroChips.forEach((btn) => {
+      const isActive = btn === chip;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+    renderAstro(selectedAstro);
+  });
+});
+
+if (loveDrawButton) {
+  loveDrawButton.addEventListener("click", renderLove);
+}
+
+if (compatDrawButton) {
+  compatDrawButton.addEventListener("click", renderCompat);
+}
+
+if (toggleLoveButton && toggleCompatButton && lovePanel && compatPanel) {
+  const setActivePanel = (target) => {
+    const isLove = target === "love";
+    toggleLoveButton.classList.toggle("active", isLove);
+    toggleLoveButton.setAttribute("aria-selected", isLove ? "true" : "false");
+    toggleCompatButton.classList.toggle("active", !isLove);
+    toggleCompatButton.setAttribute("aria-selected", !isLove ? "true" : "false");
+    lovePanel.classList.toggle("is-hidden-panel", !isLove);
+    compatPanel.classList.toggle("is-hidden-panel", isLove);
+  };
+
+  toggleLoveButton.addEventListener("click", () => setActivePanel("love"));
+  toggleCompatButton.addEventListener("click", () => setActivePanel("compat"));
+}
 
 const animalSummaryLine = "동물의 꿈은 지금 당신의 본능과 에너지 상태를 보여줍니다.";
 
