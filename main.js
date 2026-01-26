@@ -703,4 +703,85 @@ if (clearHistoryButton) {
   });
 }
 
+const initExtendedFilters = () => {
+  const extendedSection = document.querySelector("#extended");
+  if (!extendedSection) {
+    return;
+  }
+  const modal = document.querySelector("#extendedModal");
+  if (!modal) {
+    return;
+  }
+  const filterButtons = [...modal.querySelectorAll("[data-filter]")];
+  const symbolCards = [...modal.querySelectorAll(".symbol-grid article")];
+  if (!filterButtons.length || !symbolCards.length) {
+    return;
+  }
+
+  const applyFilter = (filter) => {
+    symbolCards.forEach((card) => {
+      const raw = card.dataset.category || "";
+      const categories = raw.split(",").map((item) => item.trim()).filter(Boolean);
+      const matches = filter === "전체" || categories.includes(filter);
+      card.classList.toggle("is-hidden", !matches);
+    });
+  };
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.filter || "전체";
+      filterButtons.forEach((item) => {
+        const isActive = item === button;
+        item.classList.toggle("active", isActive);
+        item.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+      applyFilter(filter);
+    });
+  });
+
+  applyFilter("전체");
+};
+
+const initExtendedModal = () => {
+  const modal = document.querySelector("#extendedModal");
+  const openButton = document.querySelector("#openExtended");
+  if (!modal || !openButton) {
+    return;
+  }
+  const closeButtons = [...modal.querySelectorAll(".modal-close, .modal-backdrop")];
+
+  const openModal = () => {
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    const firstFilter = modal.querySelector(".filter-button");
+    if (firstFilter instanceof HTMLElement) {
+      firstFilter.focus();
+    }
+  };
+
+  const closeModal = () => {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  openButton.addEventListener("click", openModal);
+  closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("is-open")) {
+      closeModal();
+    }
+  });
+};
+
 renderHistory(loadHistory());
+initExtendedFilters();
+initExtendedModal();

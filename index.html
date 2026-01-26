@@ -128,8 +128,293 @@
           <h3>집</h3>
           <p>나의 심리적 기반. 방이 많을수록 탐색할 내면이 큽니다.</p>
         </article>
+        <article>
+          <h3>용</h3>
+          <p>큰 기운이 곁에 머무는 징조. 조력자와 기회가 다가오며, 과감한 결단이 복을 부릅니다.</p>
+        </article>
+        <article>
+          <h3>돼지</h3>
+          <p>재물과 풍요의 신호. 작은 이익이 모여 결실을 이루나, 욕심이 지나치면 복이 새어 나갑니다.</p>
+        </article>
+        <article>
+          <h3>신비로운 것들</h3>
+          <p>보이지 않는 인연과 길이 열리는 징후. 직감이 강해지는 때이니 마음이 끌리는 방향을 따르세요.</p>
+        </article>
       </div>
     </section>
+
+    <section id="extended" class="symbols reveal">
+      <div class="section-title">
+        <h2>추가 꿈풀이: 더 넓은 해석</h2>
+        <p>요청하신 항목을 바탕으로 확장한 해몽입니다. 현재 상황과 감정에 맞춰 읽어보세요.</p>
+      </div>
+      <div class="extended-actions">
+        <button class="btn ghost" type="button" id="openExtended">별도 창으로 보기</button>
+      </div>
+    </section>
+
+    <div class="modal" id="extendedModal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-surface" role="document">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">확장 꿈풀이</p>
+            <h3>추가 꿈풀이: 더 넓은 해석</h3>
+          </div>
+          <button class="btn ghost modal-close" type="button" aria-label="닫기">닫기</button>
+        </div>
+        <p class="modal-lead">필터를 눌러 원하는 범주의 꿈풀이만 모아볼 수 있습니다.</p>
+        <div class="filter-bar" role="tablist" aria-label="추가 꿈풀이 필터">
+          <button class="filter-button active" type="button" data-filter="전체" aria-pressed="true">전체</button>
+          <button class="filter-button" type="button" data-filter="행동/상황" aria-pressed="false">행동/상황</button>
+          <button class="filter-button" type="button" data-filter="감정/상태" aria-pressed="false">감정/상태</button>
+          <button class="filter-button" type="button" data-filter="관계/인물" aria-pressed="false">관계/인물</button>
+          <button class="filter-button" type="button" data-filter="자연/환경" aria-pressed="false">자연/환경</button>
+          <button class="filter-button" type="button" data-filter="신체/감각" aria-pressed="false">신체/감각</button>
+          <button class="filter-button" type="button" data-filter="장소/공간" aria-pressed="false">장소/공간</button>
+          <button class="filter-button" type="button" data-filter="사물/기호" aria-pressed="false">사물/기호</button>
+          <button class="filter-button" type="button" data-filter="초월/미지" aria-pressed="false">초월/미지</button>
+        </div>
+        <div class="symbol-grid">
+        <article data-category="행동/상황">
+          <h3>비행</h3>
+          <p>자유, 새로운 경험, 더 높은 목표를 향한 욕구를 나타낼 수 있습니다.</p>
+        </article>
+        <article data-category="사물/기호,감정/상태">
+          <h3>음식</h3>
+          <p>만족감, 보상, 혹은 강한 욕구가 쌓였다는 신호일 수 있습니다.</p>
+        </article>
+        <article data-category="행동/상황,감정/상태">
+          <h3>길을 잃음</h3>
+          <p>혼란, 방향 상실, 인생의 선택에 대한 불안을 드러냅니다.</p>
+        </article>
+        <article data-category="관계/인물,자연/환경">
+          <h3>동물</h3>
+          <p>감정과 본성, 혹은 해당 동물의 상징적 의미와 연결됩니다.</p>
+        </article>
+        <article data-category="행동/상황,감정/상태">
+          <h3>폭력/공격</h3>
+          <p>스트레스, 불안, 자아 방어에 대한 욕구가 반영됩니다.</p>
+        </article>
+        <article data-category="장소/공간,사물/기호">
+          <h3>옷/집</h3>
+          <p>자아 이미지, 자존감, 안전감과 관련된 메시지일 수 있습니다.</p>
+        </article>
+        <article data-category="관계/인물">
+          <h3>옛 사람</h3>
+          <p>추억, 과거 경험, 자아 성장 과정과 연결됩니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>물고기/물</h3>
+          <p>감정의 깊이, 심리적 무의식, 내면의 흐름을 상징합니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>신체 변화</h3>
+          <p>자아 이미지 변화, 외모나 건강에 대한 불안이 반영됩니다.</p>
+        </article>
+        <article data-category="관계/인물">
+          <h3>유명인</h3>
+          <p>성공, 영감, 목표 실현에 대한 욕구가 드러납니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>낮은 곳의 물</h3>
+          <p>갈증, 감정 표현, 혹은 새로운 시작의 상징일 수 있습니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>별/밤하늘</h3>
+          <p>희망, 영감, 긍정적 변화에 대한 욕구를 나타냅니다.</p>
+        </article>
+        <article data-category="행동/상황">
+          <h3>탐험/모험</h3>
+          <p>탐구심, 용기, 새로운 경험에 대한 욕구가 큽니다.</p>
+        </article>
+        <article data-category="관계/인물">
+          <h3>가족/남매</h3>
+          <p>연결, 안정성, 가족 관계의 중요성을 반영합니다.</p>
+        </article>
+        <article data-category="장소/공간,자연/환경">
+          <h3>무인도/외딴 섬</h3>
+          <p>고립, 휴식, 자기 내면과의 대화를 나타낼 수 있습니다.</p>
+        </article>
+        <article data-category="감정/상태">
+          <h3>눈물/울음</h3>
+          <p>감정 표현, 스트레스 해소, 압박에서의 해방을 뜻합니다.</p>
+        </article>
+        <article data-category="자연/환경,감정/상태">
+          <h3>자연 재해</h3>
+          <p>불안, 무력감, 예기치 못한 변화에 대한 두려움이 담깁니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>숲</h3>
+          <p>탐험, 휴식, 숨겨진 부분에 대한 욕구를 시사합니다.</p>
+        </article>
+        <article data-category="행동/상황">
+          <h3>자동차/운전</h3>
+          <p>자기 통제, 목표 달성, 삶의 여정과 연결됩니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>감각 기관</h3>
+          <p>인식과 상호작용에 대한 관심이 높아졌다는 신호입니다.</p>
+        </article>
+        <article data-category="사물/기호,감정/상태">
+          <h3>시계/시간</h3>
+          <p>시간 압박, 스트레스, 미래에 대한 불안이 반영됩니다.</p>
+        </article>
+        <article data-category="장소/공간,감정/상태">
+          <h3>감옥/구속</h3>
+          <p>제약, 자유 제한, 어려움에 대한 불안을 의미합니다.</p>
+        </article>
+        <article data-category="관계/인물">
+          <h3>매춘</h3>
+          <p>욕망, 관계, 성적 자아의 양면성과 연결될 수 있습니다.</p>
+        </article>
+        <article data-category="사물/기호,행동/상황">
+          <h3>무기/폭력</h3>
+          <p>분노, 자아 방어, 위험에 대한 경고를 나타냅니다.</p>
+        </article>
+        <article data-category="사물/기호">
+          <h3>상자/가방</h3>
+          <p>내면, 비밀, 감정의 저장과 관련된 상징입니다.</p>
+        </article>
+        <article data-category="사물/기호">
+          <h3>빛/어둠</h3>
+          <p>인식과 진리, 혹은 불확실성에 대한 욕구를 드러냅니다.</p>
+        </article>
+        <article data-category="감정/상태">
+          <h3>반복되는 꿈</h3>
+          <p>미해결 과제, 계속되는 상황, 중요한 메시지를 뜻합니다.</p>
+        </article>
+        <article data-category="감정/상태">
+          <h3>꿈 속의 꿈</h3>
+          <p>현실과 꿈의 경계, 자아 의식, 혼란을 반영합니다.</p>
+        </article>
+        <article data-category="장소/공간,감정/상태">
+          <h3>고향/과거</h3>
+          <p>추억, 과거 경험, 성장 과정과 관련됩니다.</p>
+        </article>
+        <article data-category="감정/상태">
+          <h3>임신/태아</h3>
+          <p>새로운 시작, 창조, 기대감의 상징입니다.</p>
+        </article>
+        <article data-category="장소/공간">
+          <h3>지하 공간</h3>
+          <p>무의식, 숨겨진 비밀, 내면 탐구의 욕구를 나타냅니다.</p>
+        </article>
+        <article data-category="장소/공간,행동/상황">
+          <h3>무대/공연</h3>
+          <p>주목, 인정, 공개적 역할에 대한 욕구를 의미합니다.</p>
+        </article>
+        <article data-category="신체/감각,감정/상태">
+          <h3>나체</h3>
+          <p>취약성, 자아 노출, 자아 이미지와 연결됩니다.</p>
+        </article>
+        <article data-category="관계/인물">
+          <h3>낯선 사람</h3>
+          <p>새 인연, 소통, 미래 기회에 대한 관심을 뜻합니다.</p>
+        </article>
+        <article data-category="초월/미지">
+          <h3>슈퍼파워</h3>
+          <p>힘, 자신감, 자기 통제에 대한 욕구가 반영됩니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>날씨</h3>
+          <p>감정의 흐름, 현재 상황, 삶의 변화를 나타낼 수 있습니다.</p>
+        </article>
+        <article data-category="장소/공간,사물/기호">
+          <h3>상점/자판기</h3>
+          <p>소비, 보상, 목표 달성과 관련된 욕구가 드러납니다.</p>
+        </article>
+        <article data-category="사물/기호">
+          <h3>사진/그림</h3>
+          <p>기억, 창의성, 예술적 욕구와 연결됩니다.</p>
+        </article>
+        <article data-category="사물/기호">
+          <h3>문서/편지</h3>
+          <p>정보, 소식, 의사소통에 대한 관심을 뜻합니다.</p>
+        </article>
+        <article data-category="사물/기호">
+          <h3>돈</h3>
+          <p>가치, 자아 가치, 경제적 관심을 반영합니다.</p>
+        </article>
+        <article data-category="관계/인물">
+          <h3>예술가</h3>
+          <p>창의성, 감성 표현, 예술적 욕구의 신호입니다.</p>
+        </article>
+        <article data-category="초월/미지">
+          <h3>외계 생명체/UFO</h3>
+          <p>미지, 다른 현실, 호기심에 대한 관심이 나타납니다.</p>
+        </article>
+        <article data-category="행동/상황,감정/상태">
+          <h3>교통사고</h3>
+          <p>불안, 통제 불능, 목표 달성의 방해를 의미합니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>바다/파도</h3>
+          <p>감정의 파도, 무한성, 변화에 대한 열망을 드러냅니다.</p>
+        </article>
+        <article data-category="행동/상황">
+          <h3>스포츠/경기</h3>
+          <p>경쟁, 협동, 목표 달성에 대한 욕구가 담깁니다.</p>
+        </article>
+        <article data-category="사물/기호">
+          <h3>기술 기기</h3>
+          <p>연결, 소통, 현대적 삶에 대한 관심을 상징합니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>바람</h3>
+          <p>자유, 풍요, 제한에서 벗어나려는 욕구를 나타냅니다.</p>
+        </article>
+        <article data-category="행동/상황,사물/기호">
+          <h3>물건을 찾음</h3>
+          <p>상실에 대한 불안, 회복 욕구, 과거의 기억과 관련됩니다.</p>
+        </article>
+        <article data-category="행동/상황,자연/환경">
+          <h3>수영/물놀이</h3>
+          <p>기쁨, 신선함, 감정 정화의 신호입니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>폭포</h3>
+          <p>감정 해방, 정화, 변화에 대한 열망을 뜻합니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>뱀</h3>
+          <p>변화, 유혹, 감정적 복잡성과 연결될 수 있습니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>머리/머리카락</h3>
+          <p>자아 표현, 자기 이미지, 정신 상태를 나타냅니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>눈</h3>
+          <p>인식, 관찰, 시각적 경험에 대한 관심을 의미합니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>귀</h3>
+          <p>소리, 소통, 주변 환경에 대한 관심을 반영합니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>코</h3>
+          <p>냄새, 인지, 환경 인식과 관련됩니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>혀</h3>
+          <p>맛, 음식, 언어적 소통에 대한 욕구를 나타냅니다.</p>
+        </article>
+        <article data-category="신체/감각">
+          <h3>손</h3>
+          <p>행동, 상호작용, 창조 능력에 대한 관심이 담깁니다.</p>
+        </article>
+        <article data-category="장소/공간">
+          <h3>도서관</h3>
+          <p>지식, 학습, 자기 계발에 대한 욕구를 의미합니다.</p>
+        </article>
+        <article data-category="자연/환경">
+          <h3>산</h3>
+          <p>높은 목표, 도전, 자아 성장과 연결될 수 있습니다.</p>
+        </article>
+        </div>
+      </div>
+      <button class="modal-backdrop" type="button" aria-label="모달 닫기"></button>
+    </div>
 
     <section id="ritual" class="ritual reveal">
       <div class="ritual-card">
