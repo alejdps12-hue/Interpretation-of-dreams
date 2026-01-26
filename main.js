@@ -14,15 +14,9 @@ if (bookIntro) {
 
 if (startBookButton && bookIntro) {
   startBookButton.addEventListener("click", () => {
-    if (document.body.classList.contains("intro-opening")) {
-      return;
-    }
-    document.body.classList.add("intro-opening");
-    window.setTimeout(() => {
-      document.body.classList.add("intro-complete");
-      document.body.classList.remove("intro-active");
-      bookIntro.setAttribute("aria-hidden", "true");
-    }, 1500);
+    document.body.classList.add("intro-complete");
+    document.body.classList.remove("intro-active");
+    bookIntro.setAttribute("aria-hidden", "true");
   });
 }
 

@@ -273,54 +273,6 @@ body.intro-complete .book-intro {
   pointer-events: none;
 }
 
-body.intro-opening .book-cover-frame {
-  animation: coverBreathe 1.2s ease forwards;
-}
-
-body.intro-opening .cover-front {
-  animation: coverOpen 0.8s ease 0.05s forwards;
-}
-
-body.intro-opening .page-a {
-  animation: pageReveal 0.9s ease 0.4s forwards;
-}
-
-body.intro-opening .page-b {
-  animation: pageReveal 0.9s ease 0.55s forwards;
-}
-
-body.intro-opening .page-c {
-  animation: pageReveal 0.9s ease 0.7s forwards;
-}
-
-@keyframes coverBreathe {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0.98);
-  }
-}
-
-@keyframes coverOpen {
-  0% {
-    transform: rotateY(0deg);
-  }
-  100% {
-    transform: rotateY(-140deg);
-  }
-}
-
-@keyframes pageReveal {
-  0% {
-    transform: rotateY(0deg);
-    opacity: 0;
-  }
-  100% {
-    transform: rotateY(-150deg);
-    opacity: 0.25;
-  }
-}
 
 a {
   color: inherit;
@@ -336,12 +288,7 @@ a {
     animation: none;
   }
 
-  body.intro-opening .cover-front {
-    animation: none;
-  }
-
   body.intro-opening .page-sheet {
-    animation: none;
     opacity: 0.2;
   }
 }
