@@ -5,6 +5,20 @@ const sampleDreamButton = document.querySelector("#sampleDream");
 const clearDreamButton = document.querySelector("#clearDream");
 const historyList = document.querySelector("#historyList");
 const clearHistoryButton = document.querySelector("#clearHistory");
+const startBookButton = document.querySelector("#startBook");
+const bookIntro = document.querySelector(".book-intro");
+
+if (bookIntro) {
+  document.body.classList.add("intro-active");
+}
+
+if (startBookButton && bookIntro) {
+  startBookButton.addEventListener("click", () => {
+    document.body.classList.add("intro-complete");
+    document.body.classList.remove("intro-active");
+    bookIntro.setAttribute("aria-hidden", "true");
+  });
+}
 
 const animalSummaryLine = "동물의 꿈은 지금 당신의 본능과 에너지 상태를 보여줍니다.";
 
