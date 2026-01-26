@@ -39,41 +39,53 @@ const animalChips = Array.from(document.querySelectorAll(".chip-button"));
 let selectedAnimal = "";
 
 const fortuneProfiles = {
-  "용": {
-    theme: "큰 결단과 확장",
-    vibe: "지금의 선택은 큰 흐름을 바꿀 수 있습니다.",
+  "쥐": {
+    theme: "재빠른 기회 포착",
+    vibe: "작은 단서가 큰 흐름으로 이어집니다.",
+  },
+  "소": {
+    theme: "꾸준함과 안정",
+    vibe: "천천히 가도 방향만 맞으면 성과가 납니다.",
   },
   "호랑이": {
     theme: "담대함과 경쟁",
     vibe: "주저함을 내려놓는 순간 기회가 열립니다.",
   },
-  "여우": {
-    theme: "기민한 통찰",
-    vibe: "관계를 읽는 눈이 예민해집니다.",
+  "토끼": {
+    theme: "호감과 기회",
+    vibe: "사소한 친절이 행운을 부릅니다.",
   },
-  "부엉이": {
-    theme: "집중과 지혜",
-    vibe: "정보를 모아 한 번에 정리하는 날입니다.",
+  "용": {
+    theme: "큰 결단과 확장",
+    vibe: "지금의 선택은 큰 흐름을 바꿀 수 있습니다.",
+  },
+  "뱀": {
+    theme: "직감과 집중",
+    vibe: "본능을 믿으면 중요한 답이 보입니다.",
   },
   "말": {
     theme: "이동과 추진",
     vibe: "속도를 올리면 성과가 빨라질 수 있습니다.",
   },
+  "양": {
+    theme: "조화와 배려",
+    vibe: "관계를 부드럽게 정리하면 길이 열립니다.",
+  },
+  "원숭이": {
+    theme: "기민함과 재치",
+    vibe: "유연한 대처가 문제를 쉽게 풉니다.",
+  },
+  "닭": {
+    theme: "정리와 성실",
+    vibe: "정돈된 루틴이 운을 단단하게 만듭니다.",
+  },
+  "개": {
+    theme: "신뢰와 연대",
+    vibe: "한 사람과의 협력이 큰 힘이 됩니다.",
+  },
   "돼지": {
     theme: "풍요와 결실",
     vibe: "작은 기회가 금전 흐름으로 이어집니다.",
-  },
-  "토끼": {
-    theme: "호감과 기회",
-    vibe: "사소한 친절이 행운을 부릅니다.",
-  },
-  "고양이": {
-    theme: "감각과 거리",
-    vibe: "마음의 경계를 지키면 안정감이 커집니다.",
-  },
-  "늑대": {
-    theme: "집중과 경계",
-    vibe: "신호를 빠르게 읽으면 위험을 피합니다.",
   },
 };
 
@@ -98,7 +110,27 @@ const fortuneLines = {
   ],
 };
 
-const pickLine = (list) => list[Math.floor(Math.random() * list.length)];
+const dateSeed = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+};
+
+const hashString = (value) => {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash << 5) - hash + value.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+const pickLine = (list, seed) => {
+  const hash = hashString(seed);
+  return list[hash % list.length];
+};
 
 const renderFortune = (animal) => {
   if (!fortuneResult) {
@@ -109,13 +141,14 @@ const renderFortune = (animal) => {
     fortuneResult.innerHTML = '<p class="muted">동물을 먼저 선택하세요.</p>';
     return;
   }
-  const score = 70 + Math.floor(Math.random() * 26);
-  const luck = pickLine(fortuneLines.luck);
-  const caution = pickLine(fortuneLines.caution);
-  const action = pickLine(fortuneLines.action);
+  const today = dateSeed();
+  const score = 70 + (hashString(`${animal}-${today}-score`) % 26);
+  const luck = pickLine(fortuneLines.luck, `${animal}-${today}-luck`);
+  const caution = pickLine(fortuneLines.caution, `${animal}-${today}-caution`);
+  const action = pickLine(fortuneLines.action, `${animal}-${today}-action`);
   fortuneResult.innerHTML = "";
   const title = document.createElement("h3");
-  title.textContent = `${animal}의 운세`;
+  title.textContent = `${animal}띠 오늘의 운세`;
   const meta = document.createElement("p");
   meta.className = "fortune-score";
   meta.textContent = `운세 지수 ${score} · ${profile.theme}`;
