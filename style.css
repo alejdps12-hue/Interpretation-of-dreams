@@ -160,7 +160,8 @@ body::after {
   transform-origin: left center;
   transform: rotateY(0deg);
   backface-visibility: hidden;
-  z-index: 4;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .cover-front::before {
@@ -210,6 +211,8 @@ body::after {
   display: grid;
   place-items: center;
   gap: 10px;
+  position: relative;
+  z-index: 5;
 }
 
 .cover-title h1 {
@@ -220,6 +223,8 @@ body::after {
 .cover-bottom {
   display: flex;
   justify-content: flex-end;
+  position: relative;
+  z-index: 5;
 }
 
 .start-button {
