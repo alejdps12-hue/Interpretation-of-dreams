@@ -46,9 +46,9 @@
           <label for="dreamInput" class="sr-only">꿈 내용</label>
           <textarea id="dreamInput" name="dream" rows="6" placeholder="예: 폭풍 속에서 등대를 찾았는데, 불빛이 점점 선명해졌다."></textarea>
           <div class="form-row">
-            <button class="btn primary" type="submit">해독 만들기</button>
-            <button class="btn ghost" type="button" id="sampleDream">샘플 몽상 보기</button>
-            <button class="btn ghost" type="button" id="clearDream">지우기</button>
+            <button class="btn hero-link" type="submit">해독 만들기</button>
+            <button class="btn hero-link" type="button" id="sampleDream">샘플 몽상 보기</button>
+            <button class="btn hero-link" type="button" id="clearDream">지우기</button>
           </div>
         </form>
       </div>
@@ -70,8 +70,30 @@
           <p class="muted">아직 저장된 해석이 없습니다.</p>
         </div>
         <div class="history-actions">
-          <button class="btn ghost" type="button" id="clearHistory">책 지우기</button>
+          <button class="btn hero-link" type="button" id="clearHistory">책 지우기</button>
         </div>
+        <p class="muted">이 기록은 서버에 저장되지 않으므로 기기 변경 또는 데이터 삭제 시 사라질 수 있습니다.</p>
+      </div>
+    </section>
+
+    <section class="guide reveal">
+      <div class="section-title">
+        <h2>해독 안내</h2>
+        <p>해석은 정답이 아니라 자신의 상태를 점검하는 도구입니다.</p>
+      </div>
+      <div class="guide-grid">
+        <article>
+          <h3>감정 중심 해석</h3>
+          <p>감정의 강도와 변화가 핵심입니다. 장면보다 감정을 먼저 살펴보세요.</p>
+        </article>
+        <article>
+          <h3>반복 장면 기록</h3>
+          <p>반복되는 상징은 현재의 고민과 연결될 가능성이 큽니다.</p>
+        </article>
+        <article>
+          <h3>저장 방식</h3>
+          <p>기록은 브라우저에 저장되며, 기기 변경 시 이어지지 않습니다.</p>
+        </article>
       </div>
     </section>
   </main>
