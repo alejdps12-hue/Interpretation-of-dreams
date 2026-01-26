@@ -6,6 +6,15 @@ const clearDreamButton = document.querySelector("#clearDream");
 const historyList = document.querySelector("#historyList");
 const clearHistoryButton = document.querySelector("#clearHistory");
 
+const animalSummaryLine = "동물의 꿈은 지금 당신의 본능과 에너지 상태를 보여줍니다.";
+
+const animalSummaryKeywords = [
+  "동물", "동물들", "동물 꿈", "동물 새끼", "아기 동물", "새끼 동물", "동물에 물리다",
+  "개", "강아지", "고양이", "뱀", "곰", "토끼", "햄스터", "새", "참새", "원숭이",
+  "쥐", "흰 쥐", "검은 쥐", "늑대", "개구리", "여우", "고릴라", "부엉이",
+  "사자", "악어", "호랑이", "말", "돼지", "잉꼬", "환상 동물", "상상의 동물", "실재하지 않는 동물",
+];
+
 const symbolMap = [
   { keywords: ["물", "바다", "파도", "비"], meaning: "감정의 파도가 출렁입니다. 최근의 감정이 정리되길 바라는 마음이 드러납니다." },
   { keywords: ["길", "도로", "교차로", "갈림길"], meaning: "선택의 순간이 다가옵니다. 한 방향을 택하면 다른 가능성을 놓친다는 긴장감이 있습니다." },
@@ -21,6 +30,40 @@ const symbolMap = [
   { keywords: ["죽다", "사망", "장례", "부고"], meaning: "끝과 시작의 상징입니다. 관계나 삶의 국면이 정리되고 새 단계로 넘어가는 신호일 수 있습니다." },
   { keywords: ["물에 빠지다", "잠기다", "익사", "침수"], meaning: "감정에 압도당한 상태를 보여줍니다. 감정 조절의 피로가 누적된 흐름일 수 있습니다." },
   { keywords: ["무너지다", "붕괴", "무너짐", "집이 무너지다"], meaning: "심리적 안정감이 흔들리는 신호입니다. 가족, 자아 정체성, 안전 기반에 대한 불안을 담고 있습니다." },
+  { keywords: ["동물", "동물 꿈"], meaning: "기회가 다가오고 능력을 발휘할 시기가 왔음을 암시합니다." },
+  { keywords: ["동물 많이", "많은 동물", "동물들"], meaning: "긍정 감정은 활력과 생명력 상승, 부정 감정은 스트레스와 감정 과부하를 뜻합니다." },
+  { keywords: ["동물 새끼", "아기 동물", "새끼 동물"], meaning: "새로운 시작과 변화의 조짐입니다. 연애는 새 인연, 일은 새 역할·기회로 이어질 수 있습니다." },
+  { keywords: ["동물 물리다", "동물에 물리다", "물렸다"], meaning: "변화에 대한 결의가 커지고 있습니다. 진짜 원하는 것을 찾으려는 단계입니다." },
+  { keywords: ["동물 기르다", "동물을 키우다", "기르다"], meaning: "평온한 일상과 정신적 안정이 유지됩니다. 기르지 않는 동물일수록 심리적 여유를 상징합니다." },
+  { keywords: ["동물 먹다", "먹었다", "먹는 꿈"], meaning: "잠재 능력을 흡수하는 흐름입니다. 기회를 잡을 준비가 되어 있습니다." },
+  { keywords: ["개", "강아지"], meaning: "운 상승의 흐름입니다." },
+  { keywords: ["흰 개", "갈색 개"], meaning: "기회와 행운이 찾아옵니다." },
+  { keywords: ["검은 개"], meaning: "피로 누적과 컨디션 저하를 암시합니다. 휴식이 필요합니다." },
+  { keywords: ["고양이", "냥이"], meaning: "인간관계, 특히 여성 관계의 긴장과 경쟁심이 드러날 수 있습니다." },
+  { keywords: ["검은 고양이"], meaning: "행운의 상징입니다." },
+  { keywords: ["뱀"], meaning: "행복과 재물운이 상승합니다. 연애·일이 원만해지고 뜻밖의 수입도 기대됩니다." },
+  { keywords: ["곰"], meaning: "모성과 보호의 상징입니다. 계획이 안정적으로 진행될 수 있습니다." },
+  { keywords: ["토끼"], meaning: "행운이 다가옵니다. 적극적으로 행동할수록 기회가 커집니다." },
+  { keywords: ["햄스터"], meaning: "소소하지만 확실한 행복의 흐름입니다. 연애 성과나 수입 기회가 있을 수 있습니다." },
+  { keywords: ["새", "새들"], meaning: "차분하고 긍정적인 상태에서 도전을 이어갈 수 있습니다." },
+  { keywords: ["참새"], meaning: "작고 따뜻한 행운이 찾아옵니다." },
+  { keywords: ["원숭이"], meaning: "거짓말, 말장난, 분쟁 등 인간관계 트러블을 암시합니다." },
+  { keywords: ["쥐"], meaning: "흰 쥐는 연애·금전운 상승, 검은 쥐는 적·배신·라이벌을 뜻합니다." },
+  { keywords: ["흰 쥐", "하얀 쥐"], meaning: "연애와 금전운이 상승하는 흐름입니다." },
+  { keywords: ["검은 쥐", "검정 쥐"], meaning: "적이나 배신의 가능성을 경계하세요." },
+  { keywords: ["늑대"], meaning: "위험 경고의 신호입니다. 범죄나 위험한 제안에 주의하세요." },
+  { keywords: ["개구리"], meaning: "노력의 결실이 드러나고 성과가 이어질 수 있습니다." },
+  { keywords: ["큰 개구리"], meaning: "금전운 상승과 뜻밖의 수입을 암시합니다." },
+  { keywords: ["여우"], meaning: "속임이나 인간관계 트러블의 징조입니다. 주변을 신중히 살피세요." },
+  { keywords: ["고릴라"], meaning: "긍정 감정이면 관계 확대, 부정 감정이면 대인 스트레스를 뜻합니다." },
+  { keywords: ["부엉이"], meaning: "지식욕과 자기 통제력이 상승합니다. 냉정함과 확신이 강해집니다." },
+  { keywords: ["사자"], meaning: "긍정은 경쟁 승리와 출세, 부정은 오만과 대인 문제를 암시합니다." },
+  { keywords: ["악어"], meaning: "사건·사고 경고입니다. 많을수록 고민이 증가하며 긴장 해소가 필요합니다." },
+  { keywords: ["호랑이"], meaning: "에너지와 도전 정신이 상승합니다. 감정 과열을 경계하세요." },
+  { keywords: ["말", "말꿈"], meaning: "정신·체력 에너지가 상승하는 신호입니다." },
+  { keywords: ["돼지", "돼지꿈"], meaning: "재물운 상승을 뜻합니다. 돼지가 너무 많으면 스트레스 누적을 의미합니다." },
+  { keywords: ["잉꼬"], meaning: "인간관계 스트레스를 상징합니다." },
+  { keywords: ["환상 동물", "상상의 동물", "실재하지 않는 동물"], meaning: "잠재 재능과 새로운 도전의 신호입니다. 변화에 대한 기대 또는 두려움이 드러날 수 있습니다." },
 ];
 
 const insightLines = [
@@ -47,6 +90,15 @@ const integrationLines = [
   "장면이 바뀌는 지점이 심리적 전환의 문턱입니다.",
   "무서운 장면은 회피하던 주제를 직면하라는 신호일 수 있습니다.",
   "가벼운 장면은 회복의 방향을 알려주는 경우가 있습니다.",
+];
+
+const summaryToneLines = [
+  "여러 신호가 동시에 겹친 만큼, 지금은 마음의 우선순위를 재정리할 시기일 수 있습니다.",
+  "꿈의 층위가 넓게 퍼져 있어, 작은 단서들이 하나의 메시지로 모이고 있습니다.",
+  "서로 다른 상징이 연결된 만큼, 현실의 상황도 복합적인 판단을 요구합니다.",
+  "해석의 갈래가 많다는 것은 선택지가 늘었음을 뜻할 수 있습니다.",
+  "주제가 다양할수록 핵심 감정 하나를 먼저 붙잡는 것이 도움이 됩니다.",
+  "서사와 기호가 동시에 움직여, 마음의 긴장과 욕구가 함께 드러납니다.",
 ];
 
 const closureLines = [
@@ -397,6 +449,159 @@ const listMatchedKeywords = (text, map) => {
   return cleanKeywordList(unique).slice(0, 6);
 };
 
+const stripIgaKeyword = (keywords) => keywords.filter((keyword) => keyword !== "이가");
+
+const keywordInsightMap = new Map([
+  ["물", [
+    "감정의 깊이와 흐름을 상징합니다.",
+    "마음속 에너지가 움직이며 정리가 필요함을 뜻합니다.",
+  ]],
+  ["바다", [
+    "무의식의 넓이와 감정의 파도를 뜻합니다.",
+    "감정의 규모가 커져 관점을 넓혀야 함을 시사합니다.",
+  ]],
+  ["파도", [
+    "감정의 기복과 변화가 큰 시기입니다.",
+    "다가오는 사건에 대한 파동이 마음에 나타납니다.",
+  ]],
+  ["비", [
+    "정화 혹은 우울의 흐름을 나타냅니다.",
+    "마음을 씻어내는 과정이나 피로감의 신호입니다.",
+  ]],
+  ["길", [
+    "선택과 방향성을 상징합니다.",
+    "현재의 목표로 향하는 경로를 점검하라는 뜻입니다.",
+  ]],
+  ["갈림길", [
+    "중요한 결정을 앞둔 상황을 뜻합니다.",
+    "두 가치 사이의 균형을 묻는 상징입니다.",
+  ]],
+  ["숲", [
+    "무의식과 혼란, 내면 탐색을 의미합니다.",
+    "숨겨진 욕구나 감정을 발견하는 장소입니다.",
+  ]],
+  ["미로", [
+    "복잡한 문제나 방향 상실을 나타냅니다.",
+    "해답을 찾기 위한 탐색이 계속되는 상태입니다.",
+  ]],
+  ["쫓기다", [
+    "압박과 회피 심리가 동시에 작동합니다.",
+    "해결되지 않은 책임이 따라붙는 신호입니다.",
+  ]],
+  ["도망", [
+    "부담을 피하고 싶은 마음이 반영됩니다.",
+    "현실의 대면을 미루는 심리를 나타냅니다.",
+  ]],
+  ["추락", [
+    "통제 상실과 실패 두려움을 뜻합니다.",
+    "기대가 흔들리는 순간을 경고합니다.",
+  ]],
+  ["시험", [
+    "평가와 준비 부족에 대한 불안을 나타냅니다.",
+    "성과 검증에 대한 긴장이 드러납니다.",
+  ]],
+  ["이", [
+    "자기 이미지와 표현에 대한 걱정을 의미합니다.",
+    "말실수나 평판에 대한 부담이 반영됩니다.",
+  ]],
+  ["치아", [
+    "자존감과 말실수에 대한 불안이 드러납니다.",
+    "자기 이미지의 균열을 의식하는 상태입니다.",
+  ]],
+  ["싸우다", [
+    "갈등을 표출하고 싶은 욕구를 뜻합니다.",
+    "내적 긴장과 대립이 커졌음을 나타냅니다.",
+  ]],
+  ["죽음", [
+    "끝과 시작의 전환을 상징합니다.",
+    "정리와 새로운 단계의 문턱을 뜻합니다.",
+  ]],
+  ["집", [
+    "내면의 안전 기반과 자아를 의미합니다.",
+    "정서적 안식처를 점검하라는 신호입니다.",
+  ]],
+  ["방", [
+    "개인적 영역과 심리적 공간을 뜻합니다.",
+    "드러내지 않은 감정이 숨어 있는 영역입니다.",
+  ]],
+  ["문", [
+    "새로운 단계로의 진입을 상징합니다.",
+    "관계나 상황의 경계가 열리는 순간입니다.",
+  ]],
+  ["불", [
+    "분노와 열정, 급격한 변화를 나타냅니다.",
+    "에너지의 폭발과 재정비가 필요함을 뜻합니다.",
+  ]],
+  ["빛", [
+    "깨달음과 회복의 신호입니다.",
+    "상황을 명확히 보고자 하는 마음이 드러납니다.",
+  ]],
+  ["낯선", [
+    "억압된 자아나 새로운 면모가 드러납니다.",
+    "익숙하지 않은 선택을 시도하려는 흐름입니다.",
+  ]],
+  ["유명인", [
+    "이상적 자아와 목표 욕구가 반영됩니다.",
+    "인정 욕구와 성취에 대한 열망이 드러납니다.",
+  ]],
+  ["과거", [
+    "미해결 감정과 기억이 떠오릅니다.",
+    "정리되지 않은 주제를 다시 살피라는 뜻입니다.",
+  ]],
+  ["아이", [
+    "순수함 혹은 내면의 상처를 뜻합니다.",
+    "보호받고 싶은 마음이 드러납니다.",
+  ]],
+  ["늦다", [
+    "시간 압박과 불안을 나타냅니다.",
+    "기대치와 현실 사이의 간격을 의식합니다.",
+  ]],
+  ["반복", [
+    "루틴 피로 혹은 변화 필요의 신호입니다.",
+    "같은 패턴을 끊고 싶다는 마음이 반영됩니다.",
+  ]],
+  ["미래", [
+    "기대와 불안이 함께 작동합니다.",
+    "계획과 불확실성이 동시에 존재합니다.",
+  ]],
+  ["멈춤", [
+    "정체감이나 번아웃을 의미합니다.",
+    "속도를 늦추고 회복하라는 신호입니다.",
+  ]],
+  ["바람", [
+    "변화의 징후가 나타납니다.",
+    "환경의 흐름이 바뀌는 전환점입니다.",
+  ]],
+  ["어둠", [
+    "불안과 미지의 감정을 상징합니다.",
+    "모호한 상황을 직시해야 함을 뜻합니다.",
+  ]],
+  ["눈", [
+    "감정 억제와 냉각된 상태를 뜻합니다.",
+    "거리 두기나 보호 본능이 강해졌습니다.",
+  ]],
+  ["지진", [
+    "구조적 변화와 불안정함을 의미합니다.",
+    "삶의 기반이 재정렬되는 시기일 수 있습니다.",
+  ]],
+]);
+
+const buildKeywordInsights = (keywords) => {
+  const unique = [...new Set(keywords)];
+  const lines = unique
+    .map((keyword) => {
+      const meaning = keywordInsightMap.get(keyword);
+      if (!meaning) {
+        return null;
+      }
+      const text = Array.isArray(meaning) ? pickOne(meaning) : meaning;
+      return `${keyword}: ${text}`;
+    })
+    .filter(Boolean)
+    .slice(0, 6);
+  return lines;
+};
+
 const pickTopPrimarySymbol = (text) => {
   const tokens = tokenize(text);
   const matches = primarySymbolMap.filter((item) =>
@@ -425,9 +630,23 @@ const pickMany = (list, count) => {
   return picked;
 };
 
+const buildSummaryFocus = (signals) => {
+  const focus = [];
+  if (signals.includes("상징의 반복")) focus.push("상징의 의미를 다시 정리해보세요.");
+  if (signals.includes("감정의 잔향")) focus.push("감정의 강도가 높았던 장면을 중심으로 읽어보세요.");
+  if (signals.includes("환경의 배경")) focus.push("장소의 분위기와 현실 상황을 연결해보세요.");
+  if (signals.includes("관계의 구조")) focus.push("꿈에 나온 인물과의 관계 거리를 점검해보세요.");
+  if (signals.includes("시간의 분위기")) focus.push("시간 흐름이 멈추거나 빨라진 지점을 확인해보세요.");
+  if (signals.includes("행동의 패턴")) focus.push("반복된 행동이 있다면 그 이유를 추적해보세요.");
+  if (signals.includes("몸의 신호")) focus.push("신체 변화는 심리 피로의 신호일 수 있습니다.");
+  if (signals.includes("자연의 징후")) focus.push("자연 요소는 감정의 상태를 비춥니다.");
+  return pickMany(focus, 2);
+};
+
 const buildInterpretation = (text) => {
   const trimmed = text.trim();
   const tokens = tokenize(trimmed);
+  const hasAnimalSummary = animalSummaryKeywords.some((keyword) => matchesKeyword(trimmed, keyword, tokens));
   const symbolHits = pickMatches(trimmed, symbolMap);
   const emotionHits = pickMatches(trimmed, emotionMap);
   const settingHits = pickMatches(trimmed, settingMap);
@@ -446,6 +665,24 @@ const buildInterpretation = (text) => {
   const actionKeywords = listMatchedKeywords(trimmed, actionMap);
   const bodyKeywords = listMatchedKeywords(trimmed, bodyMap);
   const environmentKeywords = listMatchedKeywords(trimmed, environmentMap);
+  const displaySymbolKeywords = stripIgaKeyword(symbolKeywords);
+  const displayEmotionKeywords = stripIgaKeyword(emotionKeywords);
+  const displaySettingKeywords = stripIgaKeyword(settingKeywords);
+  const displayCharacterKeywords = stripIgaKeyword(characterKeywords);
+  const displayTimeKeywords = stripIgaKeyword(timeKeywords);
+  const displayActionKeywords = stripIgaKeyword(actionKeywords);
+  const displayBodyKeywords = stripIgaKeyword(bodyKeywords);
+  const displayEnvironmentKeywords = stripIgaKeyword(environmentKeywords);
+  const keywordInsights = buildKeywordInsights([
+    ...displaySymbolKeywords,
+    ...displayEmotionKeywords,
+    ...displaySettingKeywords,
+    ...displayCharacterKeywords,
+    ...displayTimeKeywords,
+    ...displayActionKeywords,
+    ...displayBodyKeywords,
+    ...displayEnvironmentKeywords,
+  ]);
   const secondaryAction = pickFirstMatch(trimmed, secondaryActionMap);
   const tertiaryTone = pickFirstMatch(trimmed, tertiaryToneMap);
   const compositeKeywords = cleanKeywordList([
@@ -453,7 +690,6 @@ const buildInterpretation = (text) => {
     secondaryAction?.keywords?.find((keyword) => matchesKeyword(trimmed, keyword, tokens)),
     tertiaryTone?.keywords?.find((keyword) => matchesKeyword(trimmed, keyword, tokens)),
   ].filter(Boolean));
-  const learnedKeywords = getTopLearnedKeywords(6);
 
   if (!trimmed) {
     return `<p class="muted">꿈을 입력하면 해석을 만들 수 있어요.</p>`;
@@ -475,7 +711,8 @@ const buildInterpretation = (text) => {
       <div>
         <h4>상징 해독</h4>
         <ul>${items}</ul>
-        ${symbolKeywords.length ? `<p class="muted">키워드: ${symbolKeywords.join(", ")}</p>` : ""}
+        ${hasAnimalSummary ? `<p class="muted">${animalSummaryLine}</p>` : ""}
+        ${displaySymbolKeywords.length ? `<p class="muted">키워드: ${displaySymbolKeywords.join(", ")}</p>` : ""}
       </div>
     `);
     detailChapters.push(`
@@ -493,7 +730,7 @@ const buildInterpretation = (text) => {
       <div>
         <h4>감정의 온도</h4>
         <ul>${items}</ul>
-        ${emotionKeywords.length ? `<p class="muted">키워드: ${emotionKeywords.join(", ")}</p>` : ""}
+        ${displayEmotionKeywords.length ? `<p class="muted">키워드: ${displayEmotionKeywords.join(", ")}</p>` : ""}
       </div>
     `);
     detailChapters.push(`
@@ -512,15 +749,16 @@ const buildInterpretation = (text) => {
       ...timeHits.map((hit) => hit.meaning),
     ];
     if (contextItems.length > 0) {
+      const contextKeywords = stripIgaKeyword([
+        ...settingKeywords,
+        ...characterKeywords,
+        ...timeKeywords,
+      ]);
       sections.push(`
         <div>
           <h4>배경의 메시지</h4>
           <ul>${contextItems.map((item) => `<li>${item}</li>`).join("")}</ul>
-          ${
-            settingKeywords.length || characterKeywords.length || timeKeywords.length
-              ? `<p class="muted">키워드: ${[...settingKeywords, ...characterKeywords, ...timeKeywords].slice(0, 6).join(", ")}</p>`
-              : ""
-          }
+          ${contextKeywords.length ? `<p class="muted">키워드: ${contextKeywords.slice(0, 6).join(", ")}</p>` : ""}
         </div>
       `);
     }
@@ -544,11 +782,13 @@ const buildInterpretation = (text) => {
   if (environmentHits.length > 0) themeSignals.push("자연의 징후");
 
   if (themeSignals.length > 0) {
+    const focusLines = buildSummaryFocus(themeSignals);
     summaryChapters.push(`
       <div>
         <h4>심리 요약</h4>
-        <p>이번 꿈은 ${themeSignals.join(" · ")}가 겹쳐 드러난 장면입니다. 여러 층의 신호가 동시에 나타난 만큼, 내면의 흐름이 더 선명해졌을 수 있습니다.</p>
-        ${pickMany(integrationLines, 2).map((line) => `<p class="muted">${line}</p>`).join("")}
+        <p>이번 꿈은 ${themeSignals.join(" · ")}가 겹쳐 드러난 장면입니다. ${pickMany(summaryToneLines, 1)[0]}</p>
+        ${focusLines.map((line) => `<p class="muted">${line}</p>`).join("")}
+        ${pickMany(integrationLines, 1).map((line) => `<p class="muted">${line}</p>`).join("")}
       </div>
     `);
   }
@@ -559,7 +799,7 @@ const buildInterpretation = (text) => {
       <div>
         <h4>행동의 의미</h4>
         <ul>${items}</ul>
-        ${actionKeywords.length ? `<p class="muted">키워드: ${actionKeywords.join(", ")}</p>` : ""}
+        ${displayActionKeywords.length ? `<p class="muted">키워드: ${displayActionKeywords.join(", ")}</p>` : ""}
       </div>
     `);
   }
@@ -571,7 +811,7 @@ const buildInterpretation = (text) => {
       <div>
         <h4>몸의 신호</h4>
         <ul>${items}</ul>
-        ${bodyKeywords.length ? `<p class="muted">키워드: ${bodyKeywords.join(", ")}</p>` : ""}
+        ${displayBodyKeywords.length ? `<p class="muted">키워드: ${displayBodyKeywords.join(", ")}</p>` : ""}
       </div>
     `);
     }
@@ -584,7 +824,7 @@ const buildInterpretation = (text) => {
       <div>
         <h4>자연의 징후</h4>
         <ul>${items}</ul>
-        ${environmentKeywords.length ? `<p class="muted">키워드: ${environmentKeywords.join(", ")}</p>` : ""}
+        ${displayEnvironmentKeywords.length ? `<p class="muted">키워드: ${displayEnvironmentKeywords.join(", ")}</p>` : ""}
       </div>
     `);
     }
@@ -606,11 +846,21 @@ const buildInterpretation = (text) => {
     if (tertiaryTone) {
       compositeLines.push(tertiaryTone.meaning);
     }
+    const displayCompositeKeywords = stripIgaKeyword(compositeKeywords);
     sections.unshift(`
       <div>
         <h4>복합 키워드 해석</h4>
         <p>${compositeLines.join(" ")}</p>
-        ${compositeKeywords.length ? `<p class="muted">키워드: ${compositeKeywords.join(", ")}</p>` : ""}
+        ${displayCompositeKeywords.length ? `<p class="muted">키워드: ${displayCompositeKeywords.join(", ")}</p>` : ""}
+      </div>
+    `);
+  }
+
+  if (keywordInsights.length > 0) {
+    summaryChapters.push(`
+      <div>
+        <h4>키워드 해석</h4>
+        <ul>${keywordInsights.map((line) => `<li>${line}</li>`).join("")}</ul>
       </div>
     `);
   }
@@ -622,7 +872,6 @@ const buildInterpretation = (text) => {
       <p class="muted">해석 포인트: 분위기와 감정의 단서를 중심으로 정리하면 의미가 또렷해집니다.</p>
       ${pickMany(closureLines, 2).map((line) => `<p class="muted">${line}</p>`).join("")}
       ${ritualChapters.join("")}
-      ${learnedKeywords.length ? `<p class="muted">학습 키워드: ${learnedKeywords.join(", ")}</p>` : ""}
     `;
   }
 
@@ -634,7 +883,6 @@ const buildInterpretation = (text) => {
     <p class="muted">해석 포인트: 핵심 장면을 한 문장으로 요약하면 메시지가 또렷해집니다.</p>
     ${pickMany(closureLines, 2).map((line) => `<p class="muted">${line}</p>`).join("")}
     ${ritualChapters.join("")}
-    ${learnedKeywords.length ? `<p class="muted">학습 키워드: ${learnedKeywords.join(", ")}</p>` : ""}
   `;
 };
 
