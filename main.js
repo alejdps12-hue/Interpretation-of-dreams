@@ -34,7 +34,6 @@ if (shouldLoadAdsense()) {
 }
 
 const fortuneResult = document.querySelector("#fortuneResult");
-const drawFortuneButton = document.querySelector("#drawFortune");
 const animalChips = Array.from(document.querySelectorAll(".chip-button"));
 let selectedAnimal = "";
 
@@ -174,14 +173,9 @@ animalChips.forEach((chip) => {
       btn.classList.toggle("active", isActive);
       btn.setAttribute("aria-selected", isActive ? "true" : "false");
     });
-  });
-});
-
-if (drawFortuneButton) {
-  drawFortuneButton.addEventListener("click", () => {
     renderFortune(selectedAnimal);
   });
-}
+});
 
 const animalSummaryLine = "동물의 꿈은 지금 당신의 본능과 에너지 상태를 보여줍니다.";
 

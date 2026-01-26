@@ -543,11 +543,6 @@ textarea {
   border-color: rgba(255, 240, 210, 0.8);
 }
 
-.fortune-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .fortune-result {
   background: rgba(15, 10, 6, 0.5);
   border-radius: 16px;
