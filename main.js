@@ -22,7 +22,7 @@ if (startBookButton && bookIntro) {
       document.body.classList.add("intro-complete");
       document.body.classList.remove("intro-active");
       bookIntro.setAttribute("aria-hidden", "true");
-    }, 850);
+    }, 1200);
   });
 }
 
